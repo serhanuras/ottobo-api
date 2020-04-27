@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <RootNamespace>Ottobo.Api</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+<ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.2" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.0.24" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+  </ItemGroup>
+
+<ItemGroup>
+  <ProjectReference Include="..\Ottobo.Data.Provider\Ottobo.Data.Provider.csproj" />
+  <ProjectReference Include="..\Ottobo.Entities\Ottobo.Entities.csproj" />
+  <ProjectReference Include="..\Ottobo.Extensions\Ottobo.Extensions.csproj" />
+  <ProjectReference Include="..\Ottobo.Helpers\Ottobo.Helpers.csproj" />
+  <ProjectReference Include="..\Ottobo.HostedServices\Ottobo.HostedServices.csproj" />
+  <ProjectReference Include="..\Ottobo.Services\Ottobo.Services.csproj" />
+</ItemGroup>
+
+<ItemGroup>
+  <Compile Remove="Entities\**" />
+  <Compile Remove="Extensions\**" />
+  <Compile Remove="Helpers\**" />
+  <Compile Remove="PostgreSqlProvider\**" />
+  <Compile Remove="Services\**" />
+  <Compile Remove="Migrations\**" />
+  <Compile Remove="HostedServices\**" />
+</ItemGroup>
+
+<ItemGroup>
+  <EmbeddedResource Remove="Entities\**" />
+  <EmbeddedResource Remove="Extensions\**" />
+  <EmbeddedResource Remove="Helpers\**" />
+  <EmbeddedResource Remove="PostgreSqlProvider\**" />
+  <EmbeddedResource Remove="Services\**" />
+  <EmbeddedResource Remove="Migrations\**" />
+  <EmbeddedResource Remove="HostedServices\**" />
+</ItemGroup>
+
+<ItemGroup>
+  <None Remove="Entities\**" />
+  <None Remove="Extensions\**" />
+  <None Remove="Helpers\**" />
+  <None Remove="PostgreSqlProvider\**" />
+  <None Remove="Services\**" />
+  <None Remove="Migrations\**" />
+  <None Remove=".gitignore" />
+  <None Remove="HostedServices\**" />
+  <None Remove="migration-cli.txt" />
+</ItemGroup>
+
+<ItemGroup>
+  <Content Remove="Entities\**" />
+  <Content Remove="Extensions\**" />
+  <Content Remove="Helpers\**" />
+  <Content Remove="PostgreSqlProvider\**" />
+  <Content Remove="Services\**" />
+  <Content Remove="Migrations\**" />
+  <Content Remove="HostedServices\**" />
+</ItemGroup>
+
+</Project>
