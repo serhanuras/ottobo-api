@@ -5,7 +5,7 @@ using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
 {
-    public class OrderDto
+    public class OrderDto : IDto
     {
 
         public long Id { get; set; }
@@ -18,7 +18,7 @@ namespace Ottobo.Api.Dtos
 
         public int TownId { get; set; }
 
-        public List<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetailDto> OrderDetails { get; set; }
 
     }
 }

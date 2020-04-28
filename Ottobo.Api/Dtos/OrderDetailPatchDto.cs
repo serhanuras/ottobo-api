@@ -5,7 +5,7 @@ using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
 {
-    public class OrderDetailCreationDto
+    public class OrderDetailPatchDto : IPatchDto
     {
 
         public long OrderId { get; set;}
@@ -16,7 +16,7 @@ namespace Ottobo.Api.Dtos
 
         public int PickedQuantity { get; set; }
 
-        public int OrderTypeId { get; set; }
+        public long OrderTypeId { get; set; }
 
         
 

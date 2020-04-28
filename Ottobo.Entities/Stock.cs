@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class Stock
+    public class Stock:IEntity
     {
 
         [Key]
@@ -25,10 +25,14 @@ namespace Ottobo.Entities
         public int Quantity { get; set; }
 
         public StockType StockType { get; set; }
+        
+        public long StockTypeId { get; set; }
 
         public DateTime LastMovementDate { get; set; }
 
        public string LocationLevel { get; set; }
+       
+        public ICollection<OrderDetail>  OrderDetails { get; set; }
 
     }
 }

@@ -6,7 +6,7 @@ using Ottobo.Helpers;
 
 namespace Ottobo.Api.Dtos
 {
-    public class StockCreationDto
+    public class StockCreationDto : ICreationDto
     {
 
         public long LocationId { get; set; }

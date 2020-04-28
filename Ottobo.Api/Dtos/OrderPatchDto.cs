@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Api.Dtos
 {
-    public class OrderCreationDto
+    public class OrderPatchDto : IPatchDto
     {
 
-
-
+    
         public DateTime Date { get; set; }
 
         public string Name { get; set; }
@@ -16,8 +15,6 @@ namespace Ottobo.Api.Dtos
         public int CityId { get; set; }
 
         public int TownId { get; set; }
-
-        public List<OrderDetailCreationDto> OrderDetails { get; set; }
 
     }
 }

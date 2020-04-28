@@ -9,7 +9,7 @@ namespace Ottobo.Data.Provider.PostgreSql
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseNpgsql("Host=localhost;Database=Ottobo.Api;Username=postgres;Password=docker");
+            optionsBuilder.UseNpgsql("Host=localhost;Database=Ottobo;Username=postgres;Password=docker");
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }

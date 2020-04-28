@@ -45,6 +45,8 @@
   <Compile Remove="Services\**" />
   <Compile Remove="Migrations\**" />
   <Compile Remove="HostedServices\**" />
+  <Compile Remove="Dtos\IMappingTypes.cs" />
+  <Compile Remove="Controllers\OrderTypeNewController.cs" />
 </ItemGroup>
 
 <ItemGroup>

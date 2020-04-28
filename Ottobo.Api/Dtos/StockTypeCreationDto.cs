@@ -2,9 +2,9 @@
 
 namespace Ottobo.Api.Dtos
 {
-    public class OrderTypeCreationDto
+    public class StockTypeCreationDto: ICreationDto
     {
-
+    
         public string TypeName { get; set; }
 
     }

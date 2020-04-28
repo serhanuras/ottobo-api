@@ -2,11 +2,9 @@
 
 namespace Ottobo.Api.Dtos
 {
-    public class StockTypeDto
+    public class StockTypePatchDto: IPatchDto
     {
-
-        public int Id { get; set; }
-
+    
         public string TypeName { get; set; }
 
     }

@@ -19,12 +19,15 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Ottobo.Entities;
 using Ottobo.Extensions;
 using Ottobo.Api.Filters;
 using Ottobo.HostedServices;
 using Ottobo.Api.Middlewares;
+using Ottobo.Data.Provider.IRepository;
 using Ottobo.Data.Provider.PostgreSql;
+using Ottobo.Data.Provider.Repository;
 using Ottobo.Services;
 
 namespace Ottobo.Api
@@ -43,26 +46,30 @@ namespace Ottobo.Api
         public void ConfigureServices(IServiceCollection services)
         {
             //adding filter globally...
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(typeof(ExceptionFilter));
-            })
-            .AddNewtonsoftJson()
-            .AddXmlDataContractSerializerFormatters();
+            services.AddControllers(options => { options.Filters.Add(typeof(ExceptionFilter)); })
+                .AddNewtonsoftJson(options =>
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    }
+                )
+                .AddXmlDataContractSerializerFormatters();
 
 
             services.AddCors(options =>
-                {
-                    options.AddPolicy("AllowAPIRequestIO",
-                        builder => builder.WithOrigins("https://www.apirequest.io").WithMethods("GET", "POST").AllowAnyHeader());
-                });
+            {
+                options.AddPolicy("AllowAPIRequestIO",
+                    builder => builder.WithOrigins("https://www.apirequest.io").WithMethods("GET", "POST")
+                        .AllowAnyHeader());
+            });
 
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                {
-                    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Ottobo.Api"));
-                });
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("Ottobo.Api"));
+            });
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddResponseCaching();
             services.AddTransient<CustomActionFilter>();
@@ -91,25 +98,25 @@ namespace Ottobo.Api
                 });
 
             services.Configure<IdentityOptions>(options =>
-                    {
-                            // Password settings
-                            options.Password.RequireDigit = true;
-                        options.Password.RequiredLength = 8;
-                        options.Password.RequireNonAlphanumeric = false;
-                        options.Password.RequireUppercase = true;
-                        options.Password.RequireLowercase = false;
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
 
-                            // Lockout settings
-                            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                        options.Lockout.MaxFailedAccessAttempts = 10;
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
 
-                            // // Cookie settings
-                            // options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                            // options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
+                // // Cookie settings
+                // options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
+                // options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
 
-                            // User settings
-                            options.User.RequireUniqueEmail = true;
-                    });
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
 
             services.AddHttpContextAccessor();
 
@@ -162,10 +169,7 @@ namespace Ottobo.Api
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(config =>
-                    {
-                        config.SwaggerEndpoint("/swagger/v1/swagger.json", "Ottobo.Api API");
-                    });
+            app.UseSwaggerUI(config => { config.SwaggerEndpoint("/swagger/v1/swagger.json", "Ottobo.Api API"); });
 
 
             app.UseHttpsRedirection();
@@ -176,10 +180,7 @@ namespace Ottobo.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

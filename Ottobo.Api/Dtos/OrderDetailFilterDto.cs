@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+using Ottobo.Entities;
 
-namespace Ottobo.Entities
+namespace Ottobo.Api.Dtos
 {
-    public class OrderDetail :IEntity
+    public class OrderDetailFilterDto: IFilterDto
     {
-        
-        [Key]
+
         public long Id { get; set; }
-        
+
         public Stock Stock { get; set; }
-        
-        public long StockId { get; set; }
 
         public int Quantity { get; set; }
 
@@ -23,17 +20,7 @@ namespace Ottobo.Entities
         
         public long OrderTypeId { get; set; }
         
-        [JsonIgnore]
-        public Order Order { get; set; }
-        
-        public long OrderId { get; set; }
-        
-        
-        
-        
-        
-        
-
+        public long StockId { get; set; }
 
     }
 }

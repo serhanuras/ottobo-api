@@ -6,16 +6,9 @@ using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
 {
-    public class StockFilterDto
+    public class StockFilterDto : IFilterDto
     {
-
-        public int Page { get; set; } = 1;
         
-        public int RecordsPerPage { get; set; } = 10;
-        public PaginationDto Pagination
-        {
-            get { return new PaginationDto() { Page = Page, RecordsPerPage = RecordsPerPage }; }
-        }
 
         public long LocationId { get; set; }
 
@@ -28,6 +21,7 @@ namespace Ottobo.Api.Dtos
         public int StockTypeId { get; set; }
 
         public string OrderingField { get; set; }
+        
         public bool AscendingOrder { get; set; } = true;
 
     }

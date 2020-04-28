@@ -33,6 +33,38 @@ namespace Ottobo.Data.Provider.PostgreSql
             modelBuilder.Entity<IdentityUserToken<long>>().ToTable("UsersToken");
 
 
+            //STOCK FLUENT API...
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.StockType)
+                .WithMany(e => e.Stocks)
+                .HasForeignKey(e => e.StockTypeId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            
+            //ORDER DETAIL FLUENT API
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(s => s.OrderType)
+                .WithMany(e => e.OrderDetails)
+                .HasForeignKey(e => e.OrderTypeId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(s => s.Order)
+                .WithMany(e => e.OrderDetails)
+                .HasForeignKey(e => e.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(s => s.Stock)
+                .WithMany(e => e.OrderDetails)
+                .HasForeignKey(e => e.StockId)
+                .OnDelete(DeleteBehavior.Cascade);
+                
+                
+
+
             ApplySnakeCaseNames(modelBuilder);
 
             SeedData(modelBuilder);

@@ -6,18 +6,9 @@ using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
 {
-    public class OrderFilterDto
+    public class OrderFilterDto : IFilterDto
     {
-
-        public int Page { get; set; } = 1;
         
-        public int RecordsPerPage { get; set; } = 10;
-        public PaginationDto Pagination
-        {
-            get { return new PaginationDto() { Page = Page, RecordsPerPage = RecordsPerPage }; }
-        }
-
-
         public DateTime startDate { get; set; }
 
         public DateTime endDate { get; set; }

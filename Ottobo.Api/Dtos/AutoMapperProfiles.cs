@@ -21,9 +21,10 @@ namespace Ottobo.Api.Dtos
         private void StockTypeMappings()
         {
 
-            CreateMap<StockType, StockTypeDto>();
-            CreateMap<StockTypeDto, StockType>();
+            CreateMap<StockType, StockTypeDto>().ReverseMap();
             CreateMap<StockType, StockTypeCreationDto>().ReverseMap();
+            CreateMap<StockType, StockTypeFilterDto>().ReverseMap();
+            CreateMap<StockType, StockTypePatchDto>().ReverseMap();
         }
 
         private void OrderTypeMappings()
@@ -31,6 +32,8 @@ namespace Ottobo.Api.Dtos
 
             CreateMap<OrderType, OrderTypeDto>().ReverseMap();
             CreateMap<OrderType, OrderTypeCreationDto>().ReverseMap();
+            CreateMap<OrderType, OrderTypeFilterDto>().ReverseMap();
+            CreateMap<OrderType, OrderTypePatchDto>().ReverseMap();
         }
 
         private void StockMappings()
@@ -40,9 +43,7 @@ namespace Ottobo.Api.Dtos
             CreateMap<Stock, StockCreationDto>().ReverseMap();
             CreateMap<Stock, StockFilterDto>().ReverseMap();
             CreateMap<Stock, StockPatchDto>().ReverseMap();
-
-            //  CreateMap<Stock, StockDTO>()
-            //     .ForMember(c => c.StockType, option => option.Ignore());
+            
         }
 
         private void OrderMapping()
@@ -59,6 +60,8 @@ namespace Ottobo.Api.Dtos
 
             CreateMap<OrderDetail, OrderDetailDto>().ReverseMap();
             CreateMap<OrderDetail, OrderDetailCreationDto>().ReverseMap();
+            CreateMap<OrderDetail, OrderDetailFilterDto>().ReverseMap();
+            CreateMap<OrderDetail, OrderDetailPatchDto>().ReverseMap();
         }
 
         private void AccountMapping()

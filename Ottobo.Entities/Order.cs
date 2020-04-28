@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class Order
+    public class Order: IEntity
     {
 
         [Key]
@@ -18,7 +18,7 @@ namespace Ottobo.Entities
 
         public int TownId { get; set; }
 
-        public List<OrderDetail> OrderDetails { get; set; }
+        public ICollection<OrderDetail>  OrderDetails { get; set; }
 
         public DateTime CreationDate  {get; set;}
 
