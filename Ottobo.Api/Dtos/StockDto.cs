@@ -1,8 +1,5 @@
-
-
 using System;
 using System.ComponentModel.DataAnnotations;
-using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
 {

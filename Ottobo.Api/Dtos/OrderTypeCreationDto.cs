@@ -1,5 +1,3 @@
-
-
 namespace Ottobo.Api.Dtos
 {
     public class OrderTypeCreationDto : ICreationDto

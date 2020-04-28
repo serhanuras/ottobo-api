@@ -1,15 +1,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Logging;
-using Ottobo.Data.Provider.PostgreSql;
 using Ottobo.Api.Dtos;
 using Ottobo.Data.Provider.IRepository;
-using Ottobo.Extensions;
 using Ottobo.Entities;
 
 namespace Ottobo.Api.Controllers

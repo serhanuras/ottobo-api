@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Ottobo.Api.Dtos;
 using Ottobo.Data.Provider.IRepository;
-using Ottobo.Data.Provider.PostgreSql;
 using Ottobo.Entities;
 
 namespace Ottobo.Api.Controllers

@@ -1,5 +1,4 @@
 using AutoMapper;
-using Ottobo.Api.Dtos;
 using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos

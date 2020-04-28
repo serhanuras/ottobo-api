@@ -1,17 +1,13 @@
-using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper.QueryableExtensions.Impl;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Ottobo.Api.Dtos;
 using Ottobo.Api.RouteResult;
 using Ottobo.Data.Provider.IRepository;
 using Ottobo.Entities;
-using Ottobo.Extensions;
 
 namespace Ottobo.Api.Controllers
 {
