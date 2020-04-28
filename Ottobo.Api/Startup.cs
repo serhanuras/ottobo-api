@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Ottobo.Entities;
 using Ottobo.Extensions;
 using Ottobo.Api.Filters;
@@ -28,7 +29,6 @@ namespace Ottobo.Api
 {
     public class Startup
     {
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -44,6 +44,10 @@ namespace Ottobo.Api
                 .AddNewtonsoftJson(options =>
                     {
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                        options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new SnakeCaseNamingStrategy()
+                        };
                     }
                 )
                 .AddXmlDataContractSerializerFormatters();
@@ -130,17 +134,21 @@ namespace Ottobo.Api
                     Contact = new OpenApiContact()
                     {
                         Name = "Serhan URAS",
-                        Email = "serhan.uras@ottobo.com.tr",
+                        Email = "serhan.uras@ottobo.com",
                         Url = new Uri("http://www.ottobo.com")
                     }
                 });
+                
+                config.SchemaFilter<SnakeCaseSchemaFilter>();
+                
+                
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 config.IncludeXmlComments(xmlPath);
-
             });
-
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

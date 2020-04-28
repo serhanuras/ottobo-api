@@ -43,6 +43,19 @@ namespace Ottobo.Data.Provider.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "purchase_types",
+                columns: table => new
+                {
+                    id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    type_name = table.Column<string>(maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_purchase_types", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "roles",
                 columns: table => new
                 {
@@ -99,6 +112,39 @@ namespace Ottobo.Data.Provider.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "master_data",
+                columns: table => new
+                {
+                    id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    sku_code = table.Column<string>(maxLength: 100, nullable: false),
+                    sku_name = table.Column<string>(maxLength: 100, nullable: false),
+                    barcode = table.Column<string>(maxLength: 100, nullable: false),
+                    unit_pack = table.Column<int>(nullable: false),
+                    unit_case = table.Column<int>(nullable: false),
+                    unit_palet = table.Column<int>(nullable: false),
+                    is_packaged = table.Column<bool>(nullable: false),
+                    is_cased = table.Column<bool>(nullable: false),
+                    case_width = table.Column<decimal>(nullable: false),
+                    case_height = table.Column<decimal>(nullable: false),
+                    case_depth = table.Column<decimal>(nullable: false),
+                    case_m3 = table.Column<decimal>(nullable: false),
+                    is_signed_on = table.Column<bool>(nullable: false),
+                    package_height = table.Column<decimal>(nullable: false),
+                    purchase_type_id = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_master_data", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_master_data_purchase_types_purchase_type_id",
+                        column: x => x.purchase_type_id,
+                        principalTable: "purchase_types",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "roles_claim",
                 columns: table => new
                 {
@@ -115,32 +161,6 @@ namespace Ottobo.Data.Provider.Migrations
                         name: "FK_roles_claim_roles_role_id",
                         column: x => x.role_id,
                         principalTable: "roles",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "stocks",
-                columns: table => new
-                {
-                    id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
-                    location_id = table.Column<long>(nullable: false),
-                    sku_code = table.Column<string>(maxLength: 100, nullable: false),
-                    barcode = table.Column<string>(maxLength: 100, nullable: false),
-                    location_number = table.Column<string>(nullable: true),
-                    quantity = table.Column<int>(nullable: false),
-                    stock_type_id = table.Column<long>(nullable: false),
-                    last_movement_date = table.Column<DateTime>(nullable: false),
-                    location_level = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_stocks", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_stocks_stock_types_stock_type_id",
-                        column: x => x.stock_type_id,
-                        principalTable: "stock_types",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -236,7 +256,7 @@ namespace Ottobo.Data.Provider.Migrations
                 {
                     id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
-                    stock_id = table.Column<long>(nullable: false),
+                    master_data_id = table.Column<long>(nullable: false),
                     quantity = table.Column<int>(nullable: false),
                     picked_quantity = table.Column<int>(nullable: false),
                     order_type_id = table.Column<long>(nullable: false),
@@ -245,6 +265,12 @@ namespace Ottobo.Data.Provider.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_order_details", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_order_details_master_data_master_data_id",
+                        column: x => x.master_data_id,
+                        principalTable: "master_data",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_order_details_orders_order_id",
                         column: x => x.order_id,
@@ -257,13 +283,48 @@ namespace Ottobo.Data.Provider.Migrations
                         principalTable: "order_types",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "stocks",
+                columns: table => new
+                {
+                    id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo),
+                    location_id = table.Column<long>(nullable: false),
+                    location_number = table.Column<string>(nullable: true),
+                    quantity = table.Column<int>(nullable: false),
+                    stock_type_id = table.Column<long>(nullable: false),
+                    last_movement_date = table.Column<DateTime>(nullable: false),
+                    location_level = table.Column<string>(nullable: true),
+                    master_data_id = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_stocks", x => x.id);
                     table.ForeignKey(
-                        name: "FK_order_details_stocks_stock_id",
-                        column: x => x.stock_id,
-                        principalTable: "stocks",
+                        name: "FK_stocks_master_data_master_data_id",
+                        column: x => x.master_data_id,
+                        principalTable: "master_data",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_stocks_stock_types_stock_type_id",
+                        column: x => x.stock_type_id,
+                        principalTable: "stock_types",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_master_data_purchase_type_id",
+                table: "master_data",
+                column: "purchase_type_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_order_details_master_data_id",
+                table: "order_details",
+                column: "master_data_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_details_order_id",
@@ -276,11 +337,6 @@ namespace Ottobo.Data.Provider.Migrations
                 column: "order_type_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_order_details_stock_id",
-                table: "order_details",
-                column: "stock_id");
-
-            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "roles",
                 column: "normalized_name",
@@ -290,6 +346,12 @@ namespace Ottobo.Data.Provider.Migrations
                 name: "IX_roles_claim_role_id",
                 table: "roles_claim",
                 column: "role_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_stocks_master_data_id",
+                table: "stocks",
+                column: "master_data_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_stocks_stock_type_id",
@@ -332,6 +394,9 @@ namespace Ottobo.Data.Provider.Migrations
                 name: "roles_claim");
 
             migrationBuilder.DropTable(
+                name: "stocks");
+
+            migrationBuilder.DropTable(
                 name: "users_claim");
 
             migrationBuilder.DropTable(
@@ -350,7 +415,10 @@ namespace Ottobo.Data.Provider.Migrations
                 name: "order_types");
 
             migrationBuilder.DropTable(
-                name: "stocks");
+                name: "master_data");
+
+            migrationBuilder.DropTable(
+                name: "stock_types");
 
             migrationBuilder.DropTable(
                 name: "roles");
@@ -359,7 +427,7 @@ namespace Ottobo.Data.Provider.Migrations
                 name: "users");
 
             migrationBuilder.DropTable(
-                name: "stock_types");
+                name: "purchase_types");
 
             migrationBuilder.DropSequence(
                 name: "EntityFrameworkHiLoSequence");

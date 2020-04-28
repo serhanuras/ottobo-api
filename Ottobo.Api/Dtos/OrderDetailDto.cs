@@ -1,3 +1,5 @@
+using Ottobo.Entities;
+
 namespace Ottobo.Api.Dtos
 {
     public class OrderDetailDto: IDto
@@ -5,7 +7,7 @@ namespace Ottobo.Api.Dtos
 
         public long Id { get; set; }
 
-        public StockDto Stock { get; set; }
+        public MasterData MasterData { get; set; }
 
         public int Quantity { get; set; }
 

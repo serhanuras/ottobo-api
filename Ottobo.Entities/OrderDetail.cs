@@ -9,9 +9,9 @@ namespace Ottobo.Entities
         [Key]
         public long Id { get; set; }
         
-        public Stock Stock { get; set; }
+        public MasterData MasterData { get; set; }
         
-        public long StockId { get; set; }
+        public long MasterDataId { get; set; }
 
         public int Quantity { get; set; }
 

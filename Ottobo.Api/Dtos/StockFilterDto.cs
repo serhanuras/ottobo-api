@@ -3,12 +3,7 @@ namespace Ottobo.Api.Dtos
     public class StockFilterDto : IFilterDto
     {
         
-
         public long LocationId { get; set; }
-
-        public string SkuCode { get; set; }
-
-        public string Barcode { get; set; }
 
         public string LocationNumber { get; set; }
 

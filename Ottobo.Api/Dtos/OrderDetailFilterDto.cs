@@ -7,7 +7,7 @@ namespace Ottobo.Api.Dtos
 
         public long Id { get; set; }
 
-        public Stock Stock { get; set; }
+        public MasterData MasterData { get; set; }
 
         public int Quantity { get; set; }
 

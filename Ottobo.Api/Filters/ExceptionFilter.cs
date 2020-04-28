@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using Ottobo.Api.Dtos;
 
 
 namespace Ottobo.Api.Filters
@@ -25,9 +26,9 @@ namespace Ottobo.Api.Filters
 
             context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
 
-            context.Result = new ObjectResult(new ErrorResult()
+            context.Result = new ObjectResult(new ErrorDto()
             {
-                Description = "There is a problem on server side. Please try again later..."
+                Message = "There is a problem on server side. Please try again later..."
 
             });
 
@@ -36,17 +37,5 @@ namespace Ottobo.Api.Filters
         }
 
 
-    }
-
-    [DataContract]
-    class ErrorResult
-    {
-        public ErrorResult()
-        {
-
-        }
-        
-        [DataMember(EmitDefaultValue = false)]
-        public string Description { get; set; }
     }
 }

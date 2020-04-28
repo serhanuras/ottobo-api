@@ -5,20 +5,11 @@ namespace Ottobo.Api.Dtos
 {
     public class StockDto : IDto
     {
-
         
         public long Id { get; set; }
 
         public long LocationId { get; set; }
-
-        [Required(ErrorMessage = "The field with name {0} is required.")]
-        [StringLength(100)]
-        public string SkuCode { get; set; }
-
-        [Required(ErrorMessage = "The field with name {0} is required.")]
-        [StringLength(100)]
-        public string Barcode { get; set; }
-
+        
         public string LocationNumber { get; set; }
 
         public int Quantity { get; set; }

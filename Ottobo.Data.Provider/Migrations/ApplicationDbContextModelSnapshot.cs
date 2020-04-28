@@ -261,6 +261,87 @@ namespace Ottobo.Data.Provider.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("Ottobo.Entities.MasterData", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo);
+
+                    b.Property<string>("Barcode")
+                        .IsRequired()
+                        .HasColumnName("barcode")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<decimal>("CaseDepth")
+                        .HasColumnName("case_depth")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("CaseHeight")
+                        .HasColumnName("case_height")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("CaseM3")
+                        .HasColumnName("case_m3")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("CaseWidth")
+                        .HasColumnName("case_width")
+                        .HasColumnType("numeric");
+
+                    b.Property<bool>("IsCased")
+                        .HasColumnName("is_cased")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPackaged")
+                        .HasColumnName("is_packaged")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSignedOn")
+                        .HasColumnName("is_signed_on")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("PackageHeight")
+                        .HasColumnName("package_height")
+                        .HasColumnType("numeric");
+
+                    b.Property<long>("PurchaseTypeId")
+                        .HasColumnName("purchase_type_id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SkuCode")
+                        .IsRequired()
+                        .HasColumnName("sku_code")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("SkuName")
+                        .IsRequired()
+                        .HasColumnName("sku_name")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("UnitCase")
+                        .HasColumnName("unit_case")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UnitPack")
+                        .HasColumnName("unit_pack")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UnitPalet")
+                        .HasColumnName("unit_palet")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PurchaseTypeId");
+
+                    b.ToTable("master_data");
+                });
+
             modelBuilder.Entity("Ottobo.Entities.Order", b =>
                 {
                     b.Property<long>("Id")
@@ -302,6 +383,10 @@ namespace Ottobo.Data.Provider.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo);
 
+                    b.Property<long>("MasterDataId")
+                        .HasColumnName("master_data_id")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("OrderId")
                         .HasColumnName("order_id")
                         .HasColumnType("bigint");
@@ -318,17 +403,13 @@ namespace Ottobo.Data.Provider.Migrations
                         .HasColumnName("quantity")
                         .HasColumnType("integer");
 
-                    b.Property<long>("StockId")
-                        .HasColumnName("stock_id")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("MasterDataId");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("OrderTypeId");
-
-                    b.HasIndex("StockId");
 
                     b.ToTable("order_details");
                 });
@@ -352,7 +433,7 @@ namespace Ottobo.Data.Provider.Migrations
                     b.ToTable("order_types");
                 });
 
-            modelBuilder.Entity("Ottobo.Entities.Stock", b =>
+            modelBuilder.Entity("Ottobo.Entities.PurchaseType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -360,11 +441,24 @@ namespace Ottobo.Data.Provider.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo);
 
-                    b.Property<string>("Barcode")
+                    b.Property<string>("TypeName")
                         .IsRequired()
-                        .HasColumnName("barcode")
+                        .HasColumnName("type_name")
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("purchase_types");
+                });
+
+            modelBuilder.Entity("Ottobo.Entities.Stock", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo);
 
                     b.Property<DateTime>("LastMovementDate")
                         .HasColumnName("last_movement_date")
@@ -382,21 +476,22 @@ namespace Ottobo.Data.Provider.Migrations
                         .HasColumnName("location_number")
                         .HasColumnType("text");
 
+                    b.Property<long>("MasterDataId")
+                        .HasColumnName("master_data_id")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Quantity")
                         .HasColumnName("quantity")
                         .HasColumnType("integer");
-
-                    b.Property<string>("SkuCode")
-                        .IsRequired()
-                        .HasColumnName("sku_code")
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
 
                     b.Property<long>("StockTypeId")
                         .HasColumnName("stock_type_id")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MasterDataId")
+                        .IsUnique();
 
                     b.HasIndex("StockTypeId");
 
@@ -473,8 +568,23 @@ namespace Ottobo.Data.Provider.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Ottobo.Entities.MasterData", b =>
+                {
+                    b.HasOne("Ottobo.Entities.PurchaseType", "PurchaseType")
+                        .WithMany("MasterDatas")
+                        .HasForeignKey("PurchaseTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Ottobo.Entities.OrderDetail", b =>
                 {
+                    b.HasOne("Ottobo.Entities.MasterData", "MasterData")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("MasterDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ottobo.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
@@ -486,16 +596,16 @@ namespace Ottobo.Data.Provider.Migrations
                         .HasForeignKey("OrderTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Ottobo.Entities.Stock", "Stocks")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("StockId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ottobo.Entities.Stock", b =>
                 {
+                    b.HasOne("Ottobo.Entities.MasterData", "MasterData")
+                        .WithOne("Stock")
+                        .HasForeignKey("Ottobo.Entities.Stock", "MasterDataId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ottobo.Entities.StockType", "StockType")
                         .WithMany("Stocks")
                         .HasForeignKey("StockTypeId")

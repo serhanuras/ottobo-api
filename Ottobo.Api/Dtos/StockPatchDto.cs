@@ -7,9 +7,6 @@ namespace Ottobo.Api.Dtos
 
         public long LocationId { get; set; }
 
-        public string SkuCode { get; set; }
-        public string Barcode { get; set; }
-
         public string LocationNumber { get; set; }
 
         public int Quantity { get; set; }

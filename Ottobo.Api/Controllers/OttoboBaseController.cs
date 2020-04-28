@@ -42,15 +42,9 @@ namespace Ottobo.Api.Controllers
             _includeProperties = includeProperties;
         }
         
-        /// <summary>
-        /// Getting all items.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [HttpGet("list")]
-        //[ResponseCache(Duration = 60)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public virtual ActionResult<IEnumerable<TEntity>> Get([FromQuery] PaginationDto paginationDto)
+       
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public ActionResult<IEnumerable<TDto>> Get(PaginationDto paginationDto)
         {
             if (paginationDto == null)
             {
@@ -73,16 +67,8 @@ namespace Ottobo.Api.Controllers
             }
         }
         
-        
-        /// <summary>
-        /// Get Item Type By Id
-        /// </summary>
-        /// <param name="id">Id of the item to get</param>
-        /// <returns></returns>
-        [ProducesResponseType(400)]
-        [ProducesResponseType(typeof(OrderTypeDto), 200)]
-        [HttpGet("{id}")]
-        public virtual async Task<ActionResult<OrderTypeDto>> Get(long id)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public  ActionResult<TDto> Get(long id)
         {
 
             if (!ModelState.IsValid)
@@ -102,19 +88,10 @@ namespace Ottobo.Api.Controllers
             
             return Ok(dtoItem);
         }
+        
 
-
-        [HttpGet("filter")]
-        public abstract Task<ActionResult<List<TDto>>> Filter([FromQuery] PaginationDto paginationDto,
-            TFilterDto filterDto);
-
-
-        /// <summary>
-        /// Adding Item Type
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        public virtual async Task<ActionResult> Post(TCreationDto creationDto)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public ActionResult Post(TCreationDto creationDto)
         {
             var item = _mapper.Map<TEntity>(creationDto);
 
@@ -130,15 +107,12 @@ namespace Ottobo.Api.Controllers
         }
         
         
-        /// <summary>
-        /// Updating a Item
-        /// </summary>
-        /// <param name="id">Id of the order type to update</param>
-        /// <param name="updateDTO"></param>
-        /// <returns></returns>
-        [HttpPut("{id:int}")]
-        public virtual async Task<ActionResult> Put(int id,  TCreationDto updateDTO)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public  ActionResult Put(int id,  TCreationDto updateDTO)
         {
+            if (!_repository.Exists(id))
+                return NotFound();
+            
             var item = _mapper.Map<TEntity>(updateDTO);
             item.Id = id;
 
@@ -149,14 +123,14 @@ namespace Ottobo.Api.Controllers
             return NoContent();
         }
         
-        
-        [HttpPatch("{id}")]
-        public async Task<ActionResult> Patch(int id, JsonPatchDocument<TPatchDto> patchDocument)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public  ActionResult Patch(int id, JsonPatchDocument<TPatchDto> patchDocument)
         {
             if (patchDocument == null)
             {
                 return BadRequest();
             }
+            
 
             var item  = _unitOfWork.GetRepository<TEntity>().GetFirstOrDefault(x => x.Id == id, _includeProperties);
 
@@ -184,13 +158,8 @@ namespace Ottobo.Api.Controllers
         }
         
         
-        /// <summary>
-        /// Delete a item
-        /// </summary>
-        /// <param name="id">Id of the item to delete</param>
-        /// <returns></returns>
-        [HttpDelete("{id:int}")]
-        public virtual async Task<ActionResult> Delete(int id)
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public ActionResult Delete(int id)
         {
 
             if (!_repository.Exists(id))

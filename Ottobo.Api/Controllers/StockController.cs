@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Ottobo.Api.Dtos;
 using Ottobo.Data.Provider.IRepository;
@@ -12,7 +13,7 @@ using Ottobo.Entities;
 namespace Ottobo.Api.Controllers
 {
     [ApiController]
-    [Route("api/stock")]
+    [Route("api/[controller]")]
     public class StockController :  OttoboBaseController<Stock, StockDto, StockCreationDto, StockFilterDto, StockPatchDto>
     {
 
@@ -27,46 +28,69 @@ namespace Ottobo.Api.Controllers
             _logger = logger;
         }
         
-        public override async Task<ActionResult<List<StockDto>>> Filter(PaginationDto paginationDto, StockFilterDto stockFilterDto)
+        /// <summary>
+        /// Getting all items.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [HttpGet("list")]
+        //[ResponseCache(Duration = 60)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public  ActionResult<IEnumerable<StockDto>> Get([FromQuery] PaginationDto paginationDto)
         {
-            
-            IQueryable<Stock> stocksQueryable =_unitOfWork.GetRepository<Stock>().Queryable();
-
-            if (!string.IsNullOrWhiteSpace(stockFilterDto.SkuCode))
-            {
-                stocksQueryable = stocksQueryable.Where(x => x.SkuCode.Contains(stockFilterDto.SkuCode));
-            }
-
-            if (!string.IsNullOrWhiteSpace(stockFilterDto.Barcode))
-            {
-                stocksQueryable = stocksQueryable.Where(x => x.Barcode.Contains(stockFilterDto.Barcode));
-            }
-
-            if (stockFilterDto.StockTypeId != 0)
-            {
-                stocksQueryable = stocksQueryable
-                    .Where(x => x.StockType.Id == stockFilterDto.StockTypeId);
-            }
-
-            if (!string.IsNullOrWhiteSpace(stockFilterDto.OrderingField))
-            {
-                try
-                {
-                    stocksQueryable = stocksQueryable
-                        .OrderBy($"{stockFilterDto.OrderingField} {(stockFilterDto.AscendingOrder ? "ascending" : "descending")}");
-                }
-                catch
-                {
-                    // log this
-                    _logger.LogWarning("Could not order by field: " + stockFilterDto.OrderingField);
-                }
-            }
-
-            
-            var stocks = _unitOfWork.GetRepository<Stock>().GetAll(stocksQueryable,"", paginationDto.Page, paginationDto.RecordsPerPage);
-
-            return Ok(stocks);
+            return base.Get(paginationDto);
         }
+
+        /// <summary>
+        /// Get Item Type By Id
+        /// </summary>
+        /// <param name="id">Id of the item to get</param>
+        /// <returns></returns>
+        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(StockDto), 200)]
+        [HttpGet("{id}")]
+        public ActionResult<StockDto> Get(long id)
+        {
+            return base.Get(id);
+        }
+
+        
+        /// <summary>
+        /// Updating a Item
+        /// </summary>
+        /// <param name="id">Id of the order type to update</param>
+        /// <param name="updateDTO"></param>
+        /// <returns></returns>
+        [HttpPut("{id:int}")]
+        public ActionResult Put(int id, StockCreationDto updateDTO)
+        {
+            return base.Put(id, updateDTO);
+        }
+
+        /// <summary>
+        /// Patch Updating a Item
+        /// </summary>
+        /// <param name="id">Id of the order type to update</param>
+        /// <param name="patchDocument"></param>
+        /// <returns></returns>
+        [HttpPatch("{id}")]
+        public ActionResult Patch(int id, JsonPatchDocument<StockPatchDto> patchDocument)
+        {
+            return base.Patch(id, patchDocument);
+        }
+
+
+        /// <summary>
+        /// Delete a item
+        /// </summary>
+        /// <param name="id">Id of the item to delete</param>
+        /// <returns></returns>
+        [HttpDelete("{id:int}")]
+        public  ActionResult Delete(int id)
+        {
+            return base.Delete(id);
+        }
+
 
     }
 }

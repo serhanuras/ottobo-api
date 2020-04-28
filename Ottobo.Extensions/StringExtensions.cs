@@ -1,29 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ottobo.Extensions
 {
     public static class StringExtensions
     {
-        public static string ConvertToSnakeCase(this string value)
+        
+        public static string ToSnakeCase(this string str)
         {
-            List<char> snakeCaseList = new List<char>();
-            int n = value.Length; 
-            string str1 = ""; 
-      
-            for (int i = 0; i < n; i++) 
-            {
-                if (Char.IsUpper(value[i]))
-                {
-                    snakeCaseList.Add('_');
-                }
-                
-                snakeCaseList.Add(Char.ToLower(value[i]));
-                    
-              
-            }
-
-            return new string(snakeCaseList.ToArray());
+            return string.Concat(str.Select((character, index) =>
+                    index > 0 && char.IsUpper(character)
+                        ? "_" + character
+                        : character.ToString()))
+                .ToLower();
         }
     }
 }

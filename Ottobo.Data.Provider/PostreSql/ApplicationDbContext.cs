@@ -57,15 +57,25 @@ namespace Ottobo.Data.Provider.PostgreSql
             
             
             modelBuilder.Entity<OrderDetail>()
-                .HasOne(s => s.Stock)
+                .HasOne(s => s.MasterData)
                 .WithMany(e => e.OrderDetails)
-                .HasForeignKey(e => e.StockId)
+                .HasForeignKey(e => e.MasterDataId)
                 .OnDelete(DeleteBehavior.Cascade);
-                
-                
-
-
+            
+            //MASTER DATA FLUENT API
+            modelBuilder.Entity<MasterData>()
+                .HasOne(s => s.PurchaseType)
+                .WithMany(e => e.MasterDatas)
+                .HasForeignKey(e => e.PurchaseTypeId);
+            
+            modelBuilder.Entity<MasterData>()
+                .HasOne(s => s.Stock)
+                .WithOne(e => e.MasterData)
+                .HasForeignKey<Stock>(e => e.MasterDataId);
+            
+            
             ApplySnakeCaseNames(modelBuilder);
+
 
             SeedData(modelBuilder);
 
@@ -104,6 +114,7 @@ namespace Ottobo.Data.Provider.PostgreSql
 
 
          public DbSet<StockType> StockTypes { get; set; }
+         
          public DbSet<OrderType> OrderTypes { get; set; }
          
          public DbSet<Stock> Stocks { get; set; }
@@ -111,6 +122,10 @@ namespace Ottobo.Data.Provider.PostgreSql
          public DbSet<Order> Orders { get; set; }
 
          public DbSet<OrderDetail> OrderDetails { get; set; }
+         
+         public DbSet<PurchaseType> PurchaseTypes { get; set; }
+         
+         public DbSet<MasterData> MasterData { get; set; }
 
 
     }

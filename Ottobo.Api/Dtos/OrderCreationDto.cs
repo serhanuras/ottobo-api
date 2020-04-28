@@ -5,9 +5,7 @@ namespace Ottobo.Api.Dtos
 {
     public class OrderCreationDto: ICreationDto
     {
-
-
-
+        
         public DateTime Date { get; set; }
 
         public string Name { get; set; }

@@ -15,14 +15,7 @@ namespace Ottobo.Api.RouteResult
     {
         private const int DefaultStatusCode = StatusCodes.Status201Created;
         
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreatedAtRouteResult"/> class with the values
-        /// provided.
-        /// </summary>
-        /// <param name="routeName">The name of the route to use for generating the URL.</param>
-        /// <param name="routeValues">The route data to use for generating the URL.</param>
-        /// <param name="value">The value to format in the entity body.</param>
+        
         public CustomCreatedAtRouteResult(
             long id,
             [ActionResultObjectValue] object value)
