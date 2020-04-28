@@ -63,7 +63,7 @@ namespace Ottobo.Api
             });
 
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContextPool<ApplicationDbContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("Ottobo.Api"));
