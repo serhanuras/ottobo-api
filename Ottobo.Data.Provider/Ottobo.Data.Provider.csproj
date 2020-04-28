@@ -25,4 +25,9 @@
 
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="IRepository\IOrderTypeRepository.cs" />
+      <Compile Remove="Repository\OrderTypeRepository.cs" />
+    </ItemGroup>
+
 </Project>
