@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Ottobo.Extensions;
+using Ottobo.Infrastructure.Extensions;
 
 namespace Ottobo.Api.Filters
 {

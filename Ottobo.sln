@@ -4,15 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.Api", "Ottobo.Api\Ot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.Entities", "Ottobo.Entities\Ottobo.Entities.csproj", "{B710A297-E3D0-49FB-B78F-00990B921B28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.Extensions", "Ottobo.Extensions\Ottobo.Extensions.csproj", "{F013DF3F-1E9A-4CC7-B756-B849D28EB217}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.Helpers", "Ottobo.Helpers\Ottobo.Helpers.csproj", "{46776630-05AA-4108-8230-A4495F86EE1C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.Data.Provider", "Ottobo.Data.Provider\Ottobo.Data.Provider.csproj", "{60E3DBD0-CD19-4096-8117-853AA139F091}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.Services", "Ottobo.Services\Ottobo.Services.csproj", "{82775C22-CE71-46E7-9246-C9D785954BF8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.HostedServices", "Ottobo.HostedServices\Ottobo.HostedServices.csproj", "{87E6BBAF-671E-4321-AD1D-5A8F53F714A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ottobo.Infrastructure", "Ottobo.Infrastructure\Ottobo.Infrastructure.csproj", "{4DD6599B-C9BF-4235-AB63-5F6C868C8C0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,18 +24,6 @@ Global
 		{B710A297-E3D0-49FB-B78F-00990B921B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B710A297-E3D0-49FB-B78F-00990B921B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B710A297-E3D0-49FB-B78F-00990B921B28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F013DF3F-1E9A-4CC7-B756-B849D28EB217}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F013DF3F-1E9A-4CC7-B756-B849D28EB217}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F013DF3F-1E9A-4CC7-B756-B849D28EB217}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F013DF3F-1E9A-4CC7-B756-B849D28EB217}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46776630-05AA-4108-8230-A4495F86EE1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46776630-05AA-4108-8230-A4495F86EE1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46776630-05AA-4108-8230-A4495F86EE1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46776630-05AA-4108-8230-A4495F86EE1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60E3DBD0-CD19-4096-8117-853AA139F091}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60E3DBD0-CD19-4096-8117-853AA139F091}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60E3DBD0-CD19-4096-8117-853AA139F091}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60E3DBD0-CD19-4096-8117-853AA139F091}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82775C22-CE71-46E7-9246-C9D785954BF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82775C22-CE71-46E7-9246-C9D785954BF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82775C22-CE71-46E7-9246-C9D785954BF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,5 +32,9 @@ Global
 		{87E6BBAF-671E-4321-AD1D-5A8F53F714A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87E6BBAF-671E-4321-AD1D-5A8F53F714A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87E6BBAF-671E-4321-AD1D-5A8F53F714A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DD6599B-C9BF-4235-AB63-5F6C868C8C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DD6599B-C9BF-4235-AB63-5F6C868C8C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DD6599B-C9BF-4235-AB63-5F6C868C8C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DD6599B-C9BF-4235-AB63-5F6C868C8C0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

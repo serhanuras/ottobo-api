@@ -8,8 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Ottobo.Api.Dtos;
 using Ottobo.Entities;
-using Ottobo.Extensions;
-using Ottobo.Data.Provider.PostgreSql;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,6 +15,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Ottobo.Infrastructure.Data.PostgreSql;
+using Ottobo.Infrastructure.Extensions;
 
 namespace Ottobo.Api.Controllers
 {

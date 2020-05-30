@@ -16,6 +16,10 @@ namespace Ottobo.Api.Dtos
             AccountMapping();
             PurchaseTypeMapping();
             MasterDataMapping();
+            LocationMapping();
+            RobotMapping();
+            RobotTaskMapping();
+            TaskOrderMapping();
 
         }
         
@@ -92,6 +96,38 @@ namespace Ottobo.Api.Dtos
               .ForMember(x => x.EmailAddress, options => options.MapFrom(x => x.Email))
               .ForMember(x => x.UserId, options => options.MapFrom(x => x.Id));
 
+        }
+
+        private void LocationMapping()
+        {
+            CreateMap<Location, LocationDto>().ReverseMap();
+            CreateMap<Location, LocationCreationDto>().ReverseMap();
+            CreateMap<Location, LocationFilterDto>().ReverseMap();
+            CreateMap<Location, LocationPatchDto>().ReverseMap();
+        }
+        
+        private void RobotMapping()
+        {
+            CreateMap<Robot, RobotDto>().ReverseMap();
+            CreateMap<Robot, RobotCreationDto>().ReverseMap();
+            CreateMap<Robot, RobotFilterDto>().ReverseMap();
+            CreateMap<Robot, RobotPatchDto>().ReverseMap();
+        }
+        
+        private void RobotTaskMapping()
+        {
+            CreateMap<RobotTask, RobotTaskDto>().ReverseMap();
+            CreateMap<RobotTask, RobotTaskCreationDto>().ReverseMap();
+            CreateMap<RobotTask, RobotTaskFilterDto>().ReverseMap();
+            CreateMap<RobotTask, RobotTaskPatchDto>().ReverseMap();
+        }
+        
+        private void TaskOrderMapping()
+        {
+            CreateMap<TaskOrder, TaskOrderDto>().ReverseMap();
+            CreateMap<TaskOrder, TaskOrderCreationDto>().ReverseMap();
+            CreateMap<TaskOrder, TaskOrderFilterDto>().ReverseMap();
+            CreateMap<TaskOrder, TaskOrderPatchDto>().ReverseMap();
         }
 
     }

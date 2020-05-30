@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 
@@ -24,22 +19,24 @@ namespace Ottobo.Api
         public static IWebHostBuilder CreateHostBuilder()
         {
 
+            
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables()
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("certificate.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"certificate.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true)
+                //.AddJsonFile("certificate.json", optional: true, reloadOnChange: true)
+                //.AddJsonFile($"certificate.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true)
                 .Build();
 
+            /*
             var certificateSettings = config.GetSection("certificateSettings");
             string certificateFileName = certificateSettings.GetValue<string>("filename");
             string certificatePassword = certificateSettings.GetValue<string>("password");
 
             var certificate = new X509Certificate2(certificateFileName, certificatePassword);
-
-
+            */
+            
             var host = new WebHostBuilder()
                 .UseKestrel(
                     options =>
@@ -47,7 +44,7 @@ namespace Ottobo.Api
                         options.AddServerHeader = false;
                         options.Listen(IPAddress.Loopback, 5001, listenOptions =>
                         {
-                            listenOptions.UseHttps(certificate);
+                           //listenOptions.UseHttps(certificate);
                         });
                     }
                 )

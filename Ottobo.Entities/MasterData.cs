@@ -46,7 +46,7 @@ namespace Ottobo.Entities
 
         public long PurchaseTypeId { get; set; }
 
-        public Stock Stock { get; set; }
+        public List<Stock> Stock { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
     }

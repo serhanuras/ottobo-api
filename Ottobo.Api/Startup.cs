@@ -11,18 +11,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Ottobo.Api.Dtos;
 using Ottobo.Entities;
 using Ottobo.Extensions;
 using Ottobo.Api.Filters;
 using Ottobo.HostedServices;
 using Ottobo.Api.Middlewares;
-using Ottobo.Data.Provider.IRepository;
-using Ottobo.Data.Provider.PostgreSql;
-using Ottobo.Data.Provider.Repository;
+using Ottobo.Infrastructure.Data.IRepository;
+using Ottobo.Infrastructure.Data.PostgreSql;
+using Ottobo.Infrastructure.Data.Repository;
 using Ottobo.Services;
 
 namespace Ottobo.Api
@@ -39,6 +41,7 @@ namespace Ottobo.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             //adding filter globally...
             services.AddControllers(options => { options.Filters.Add(typeof(ExceptionFilter)); })
                 .AddNewtonsoftJson(options =>
@@ -53,32 +56,16 @@ namespace Ottobo.Api
                 .AddXmlDataContractSerializerFormatters();
 
 
+            #if DEBUG
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAPIRequestIO",
                     builder => builder.WithOrigins("https://www.apirequest.io").WithMethods("GET", "POST")
                         .AllowAnyHeader());
             });
+            #endif
 
-
-            services.AddDbContextPool<ApplicationDbContext>(options =>
-            {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("Ottobo.Api"));
-            });
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            services.AddResponseCaching();
-            services.AddTransient<CustomActionFilter>();
-            services.AddHostedService<HelloWorldHostedService>();
-            services.AddAutoMapper(typeof(Startup));
-            services.AddIdentity<ApplicationUser, IdentityRole<long>>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddTransient<HashService>();
-
+            
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -117,8 +104,37 @@ namespace Ottobo.Api
             });
 
             services.AddHttpContextAccessor();
+            
+            var serviceProvider = services.BuildServiceProvider();
+            var logger = serviceProvider.GetService<ILogger<ApplicationLogs>>();
+            services.AddSingleton(typeof(ILogger), logger);
 
+            services.AddDbContextPool<ApplicationDbContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly("Ottobo.Api"));
+            });
+            
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddResponseCaching();
+            services.AddTransient<CustomActionFilter>();
+            services.AddHostedService<HelloWorldHostedService>();
+            services.AddAutoMapper(typeof(Startup));
+            services.AddIdentity<ApplicationUser, IdentityRole<long>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
+            services.AddTransient<HashService>();
+            services.AddScoped<MasterDataService>();
+            services.AddScoped<OrderDetailService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<OrderTypeService>();
+            services.AddScoped<PurchaseTypeService>();
+            services.AddScoped<StockService>();
+            services.AddScoped<StockTypeService>();
+            services.AddScoped<LocationService>();
+            
+            
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc("v1", new OpenApiInfo
@@ -140,6 +156,8 @@ namespace Ottobo.Api
                 });
                 
                 config.SchemaFilter<SnakeCaseSchemaFilter>();
+                
+                
                 
                 
 
@@ -166,14 +184,14 @@ namespace Ottobo.Api
                 //builder.WithOrigins("https://www.apirequest.io").WithMethods("GET", "POST").AllowAnyHeader());
             }
 
-            app.UseRequestResponseLogging<RequestResponseLoggingMiddleware>();
-
+            #if DEBUG
+            //app.UseRequestResponseLogging<RequestResponseLoggingMiddleware>();
+            #endif
 
             app.UseSwagger();
 
             app.UseSwaggerUI(config => { config.SwaggerEndpoint("/swagger/v1/swagger.json", "Ottobo.Api API"); });
-
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
