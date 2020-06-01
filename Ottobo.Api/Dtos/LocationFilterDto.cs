@@ -2,7 +2,6 @@ namespace Ottobo.Api.Dtos
 {
     public class LocationFilterDto: IFilterDto
     {
-        public long Id { get; set; }
 
         public long MapId { get; set; }
         

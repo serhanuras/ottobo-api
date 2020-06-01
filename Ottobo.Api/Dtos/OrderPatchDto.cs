@@ -15,6 +15,8 @@ namespace Ottobo.Api.Dtos
         public int CityId { get; set; }
 
         public int TownId { get; set; }
+        
+        public Guid OrderTypeId { get; set; }
 
     }
 }

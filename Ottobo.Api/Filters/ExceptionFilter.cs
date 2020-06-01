@@ -22,15 +22,20 @@ namespace Ottobo.Api.Filters
         {
             _logging.LogError(context.Exception, context.Exception.Message);
 
-
-
-            context.HttpContext.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
-
-            context.Result = new ObjectResult(new ErrorDto()
+            if (context.Exception.GetType() == typeof(Infrastructure.Exceptions.NotFoundException))
             {
-                Message = "There is a problem on server side. Please try again later..."
+                context.HttpContext.Response.StatusCode = (int) System.Net.HttpStatusCode.NotFound;
+            }
+            else
+            {
+                context.HttpContext.Response.StatusCode = (int) System.Net.HttpStatusCode.InternalServerError;
 
-            });
+                context.Result = new ObjectResult(new ErrorDto()
+                {
+                    Message = "There is a problem on server side. Please try again later..."
+
+                });
+            }
 
             context.ExceptionHandled = true;
             base.OnException(context);

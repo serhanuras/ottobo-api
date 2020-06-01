@@ -1,45 +1,51 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Ottobo.Api.Attributes;
 using Ottobo.Api.Dtos;
 using Ottobo.Entities;
 using Ottobo.Services;
 
 namespace Ottobo.Api.Controllers
 {
-    public class TaskOrderController: CustomControllerBase<TaskOrder, TaskOrderDto, TaskOrderCreationDto, TaskOrderFilterDto, TaskOrderPatchDto>
+    [ApiController]
+    [LowerCaseRoute()]
+    public class PurchaseTypeController : CustomControllerBase<PurchaseType, PurchaseTypeDto, PurchaseTypeCreationDto, PurchaseTypeFilterDto, PurchaseTypePatchDto>
     {
         
-        public TaskOrderController(ILogger<Location> logger,
+        public PurchaseTypeController(ILogger<PurchaseTypeController> logger,
             IMapper mapper, 
-            TaskOrderService taskOrderService) : base(logger, mapper, taskOrderService)
+            PurchaseTypeService purchaseTypeService) : base(logger, mapper, purchaseTypeService)
         {
             
         }
-        
+
         /// <summary>
-        /// Getting all task orders.
+        /// Getting all items.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [HttpGet("list")]
         //[ResponseCache(Duration = 60)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public new ActionResult<IEnumerable<TaskOrderDto>> Get([FromQuery] PaginationDto paginationDto)
+        public  new ActionResult<IEnumerable<PurchaseTypeDto>> Get([FromQuery] PaginationDto paginationDto)
         {
             return base.Get(paginationDto);
         }
 
         /// <summary>
-        /// Get Location Type By Id
+        /// Get Item Type By Id
         /// </summary>
         /// <param name="id">Id of the item to get</param>
         /// <returns></returns>
         [ProducesResponseType(400)]
-        [ProducesResponseType(typeof(TaskOrderDto), 200)]
+        [ProducesResponseType(typeof(OrderTypeDto), 200)]
         [HttpGet("{id}")]
-        public new ActionResult<TaskOrderDto> Get(long id)
+        public new ActionResult<PurchaseTypeDto> Get(Guid id)
         {
             return base.Get(id);
         }
@@ -50,7 +56,7 @@ namespace Ottobo.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public new ActionResult Post(TaskOrderCreationDto creationDto)
+        public new ActionResult Post(PurchaseTypeCreationDto creationDto)
         {
             return base.Post(creationDto);
         }
@@ -62,23 +68,25 @@ namespace Ottobo.Api.Controllers
         /// <param name="id">Id of the order type to update</param>
         /// <param name="updateDTO"></param>
         /// <returns></returns>
-        [HttpPut("{id:int}")]
-        public new ActionResult Put(int id, TaskOrderCreationDto updateDto)
+        [HttpPut("{id:Guid}")]
+        public new ActionResult Put(Guid id, PurchaseTypeCreationDto updateDTO)
         {
-            return base.Put(id, updateDto);
+            return base.Put(id, updateDTO);
         }
-
+        
 
         /// <summary>
         /// Delete a item
         /// </summary>
         /// <param name="id">Id of the item to delete</param>
         /// <returns></returns>
-        [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        [HttpDelete("{id:Guid}")]
+        public new ActionResult Delete(Guid id)
         {
             return base.Delete(id);
-        }   
+        }
+
+       
 
     }
 }

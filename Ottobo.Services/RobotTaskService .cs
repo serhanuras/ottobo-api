@@ -6,7 +6,8 @@ namespace Ottobo.Services
 {
     public class RobotTaskService:ServiceBase<RobotTask>
     {
-        public RobotTaskService(ILogger logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
+        public RobotTaskService(ILogger logger, IUnitOfWork unitOfWork, string includeProperties)   
+            : base(logger, unitOfWork, includeProperties)
         {
         }
     }

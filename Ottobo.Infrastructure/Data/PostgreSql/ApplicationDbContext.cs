@@ -1,4 +1,5 @@
 using System.Data;
+using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -34,65 +35,57 @@ namespace Ottobo.Infrastructure.Data.PostgreSql
             modelBuilder.Entity<IdentityUserToken<long>>().ToTable("UsersToken");
 
 
-            //STOCK FLUENT API...
-            modelBuilder.Entity<Stock>()
-                .HasOne(s => s.StockType)
-                .WithMany(e => e.Stocks)
-                .HasForeignKey(e => e.StockTypeId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            
-            //ORDER DETAIL FLUENT API
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(s => s.OrderType)
-                .WithMany(e => e.OrderDetails)
-                .HasForeignKey(e => e.OrderTypeId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(s => s.Order)
-                .WithMany(e => e.OrderDetails)
-                .HasForeignKey(e => e.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(s => s.MasterData)
-                .WithMany(e => e.OrderDetails)
-                .HasForeignKey(e => e.MasterDataId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
             //MASTER DATA FLUENT API
             modelBuilder.Entity<MasterData>()
                 .HasOne(s => s.PurchaseType)
-                .WithMany(e => e.MasterDatas)
-                .HasForeignKey(e => e.PurchaseTypeId);
+                .WithMany(e => e.MasterDataList)
+                .HasForeignKey(a => a.PurchaseTypeId);
             
-            modelBuilder.Entity<MasterData>()
-                .HasMany(s => s.Stock)
-                .WithOne(e => e.MasterData)
-                .HasForeignKey(e => e.MasterDataId);
+            //ORDER FLUENT API
+            modelBuilder.Entity<Order>()
+                .HasOne(e => e.OrderType)
+                .WithMany(s => s.OrderList)
+                .HasForeignKey(e => e.OrderTypeId);
+            
+            //ORDER DETAIL FLUENT API
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(e => e.Stock)
+                .WithMany(s => s.OrderDetailList)
+                .HasForeignKey(e => e.StockId);
 
-
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(e => e.Order)
+                .WithMany(e => e.OrderDetailList)
+                .HasForeignKey(e => e.OrderId);
+            
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(e => e.RobotTask)
+                .WithMany(e => e.OrderDetailList)
+                .HasForeignKey(e => e.RobotTaskId);
+            
             //ROBOT TASK FLUENT API
             modelBuilder.Entity<RobotTask>()
-                .HasMany(e => e.TaskOrders)
-                .WithOne(e => e.RobotTask)
-                .HasForeignKey(e => e.RobotTaskId);
+                .HasOne(e => e.Robot)
+                .WithMany(s => s.RobotTaskList)
+                .HasForeignKey(e => e.RobotId);
+            
+            
+            //STOCK FLUENT API...
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.StockType)
+                .WithMany(e => e.StockList)
+                .HasForeignKey(s => s.StockTypeId);
 
-            modelBuilder.Entity<RobotTask>()
-                .HasOne(e => e.Robot);
-            
-            //TASK ORDER FLUENT API
-            modelBuilder.Entity<TaskOrder>()
-                .HasOne(e => e.Location);
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.Location)
+                .WithMany(e => e.StockList)
+                .HasForeignKey(s => s.LocationId);
             
             
-            //TASK ORDER FLUENT API
-            modelBuilder.Entity<TaskOrder>()
-                .HasOne(e => e.Order);
-
+            modelBuilder.Entity<Stock>()
+                .HasOne(s => s.MasterData)
+                .WithOne(e => e.Stock)
+                .HasForeignKey<Stock>(s => s.MasterDataId);
 
             ApplySnakeCaseNames(modelBuilder);
 
@@ -132,28 +125,37 @@ namespace Ottobo.Infrastructure.Data.PostgreSql
 
         }
 
-
-         public DbSet<StockType> StockTypes { get; set; }
+        public DbSet<Location> Location { get; set; }
+         
+         public DbSet<MasterData> MasterData { get; set; }
+         
+         public DbSet<Order> Orders { get; set; }
+         
+         public DbSet<OrderDetail> OrderDetails { get; set; }
          
          public DbSet<OrderType> OrderTypes { get; set; }
          
-         public DbSet<Stock> Stocks { get; set; }
-
-         public DbSet<Order> Orders { get; set; }
-
-         public DbSet<OrderDetail> OrderDetails { get; set; }
-         
          public DbSet<PurchaseType> PurchaseTypes { get; set; }
-         
-         public DbSet<MasterData> MasterData { get; set; }
-    
-         public DbSet<Location> Location { get; set; }
          
          public DbSet<Robot> Robot { get; set; }
          
          public DbSet<RobotTask> RobotTask { get; set; }
+
+         public DbSet<Stock> Stocks { get; set; }
          
-         public DbSet<TaskOrder> TaskOrder { get; set; }
+         public DbSet<StockType> StockTypes { get; set; }
+
+         
+
+         
+         
+         
+         
+         
+    
+        
+         
+        
 
     }
 }

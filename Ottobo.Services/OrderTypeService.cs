@@ -6,7 +6,8 @@ namespace Ottobo.Services
 {
     public class OrderTypeService:ServiceBase<OrderType>
     {
-        public OrderTypeService(ILogger logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
+        public OrderTypeService(ILogger logger, IUnitOfWork unitOfWork, string includeProperties) 
+             : base(logger, unitOfWork, includeProperties)
         {
         }
     }

@@ -1,9 +1,11 @@
 
+using System;
+
 namespace Ottobo.Api.Dtos
 {
     public class MasterDataDto : IDto
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         
         public string SkuCode { get; set; }
         
@@ -35,6 +37,6 @@ namespace Ottobo.Api.Dtos
 
         public PurchaseTypeDto PurchaseType { get; set; }
         
-        public StockDto Stock { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

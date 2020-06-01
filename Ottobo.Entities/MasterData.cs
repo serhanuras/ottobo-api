@@ -4,20 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class MasterData : IEntity
+    public class MasterData : EntityBase
     {
-        [Key] public long Id { get; set; }
-
-        [Required(ErrorMessage = "The field with name {0} is required.")]
-        [StringLength(100)]
         public string SkuCode { get; set; }
-
-        [Required(ErrorMessage = "The field with name {0} is required.")]
-        [StringLength(100)]
+        
         public string SkuName { get; set; }
-
-        [Required(ErrorMessage = "The field with name {0} is required.")]
-        [StringLength(100)]
+        
         public string Barcode { get; set; }
 
         public int UnitPack { get; set; }
@@ -39,15 +31,15 @@ namespace Ottobo.Entities
         public decimal CaseM3 { get; set; }
 
         public bool IsSignedOn { get; set; }
+        
+        public string ImageUrl { get; set; }
 
         public decimal PackageHeight { get; set; }
-
         public PurchaseType PurchaseType { get; set; }
-
-        public long PurchaseTypeId { get; set; }
-
-        public List<Stock> Stock { get; set; }
-
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        
+        public Guid PurchaseTypeId { get; set; }
+        
+        public Stock Stock { get; set; }
+        
     }
 }

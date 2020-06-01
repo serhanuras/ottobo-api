@@ -17,7 +17,7 @@ namespace Ottobo.Api.RouteResult
         
         
         public CustomCreatedAtRouteResult(
-            long id,
+            Guid id,
             [ActionResultObjectValue] object value)
             : base(value)
         {
@@ -29,7 +29,7 @@ namespace Ottobo.Api.RouteResult
         /// <summary>
         /// Gets or sets the route data to use for generating the URL.
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <inheritdoc />
         public override void OnFormatting(ActionContext context)

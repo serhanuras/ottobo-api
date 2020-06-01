@@ -4,12 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class Order: IEntity
+    public class Order: EntityBase
     {
-
-        [Key]
-        public long Id { get; set; }
-
         public DateTime Date { get; set; }
 
         public string Name { get; set; }
@@ -18,9 +14,13 @@ namespace Ottobo.Entities
 
         public int TownId { get; set; }
 
-        public ICollection<OrderDetail>  OrderDetails { get; set; }
+        public OrderType OrderType { get; set; }
+        
+        public Guid OrderTypeId { get; set; }
 
         public DateTime CreationDate  {get; set;}
+
+        public ICollection<OrderDetail> OrderDetailList   {get; set;}
 
     }
 }

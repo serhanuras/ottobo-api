@@ -6,7 +6,8 @@ namespace Ottobo.Services
 {
     public class PurchaseTypeService:ServiceBase<PurchaseType>
     {
-        public PurchaseTypeService(ILogger logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
+        public PurchaseTypeService(ILogger logger, IUnitOfWork unitOfWork, string includeProperties) 
+            : base(logger, unitOfWork, includeProperties)
         {
         }
     }

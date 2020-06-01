@@ -1,7 +1,9 @@
+using System;
+
 namespace Ottobo.Api.Dtos
 {
     public interface IDto
     {
-        long Id { get; set; }
+        Guid Id { get; set; }
     }
 }

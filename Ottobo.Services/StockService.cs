@@ -6,7 +6,8 @@ namespace Ottobo.Services
 {
     public class StockService:ServiceBase<Stock>
     {
-        public StockService(ILogger logger, IUnitOfWork unitOfWork) : base(logger, unitOfWork)
+        public StockService(ILogger logger, IUnitOfWork unitOfWork, string includeProperties)
+            : base(logger, unitOfWork, includeProperties)
         {
         }
     }

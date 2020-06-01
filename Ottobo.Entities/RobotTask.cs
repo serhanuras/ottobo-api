@@ -1,15 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class RobotTask: IEntity
+    public class RobotTask: EntityBase
     {
-        [Key]
-        public long Id { get; set; }
+
+        public string Name { get; set; }
         
         public Robot Robot { get; set; }
+        
+        public Guid RobotId { get; set; }
+        
+        public List<OrderDetail> OrderDetailList { get; set; }
+        
 
-        public ICollection<TaskOrder> TaskOrders { get; set; }
     }
 }

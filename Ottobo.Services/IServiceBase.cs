@@ -6,24 +6,29 @@ using Ottobo.Entities;
 
 namespace Ottobo.Services
 {
-    public interface IServiceBase<TEntity> where TEntity:class, IEntity
+    public interface IServiceBase<TEntity> where TEntity:class, IEntityBase
     {
-        
-        List<TEntity> Read(string includeProperties, int page = 1 , int recordsPerPage = 100);
 
-        List<TEntity> Read(int page, int recordsPerPage, string includeProperties,
-            Func<TEntity, bool> filterFunc,
+        List<TEntity> Read(int page = 1 , int recordsPerPage = 100);
+
+        List<TEntity> Read(int page, int recordsPerPage,
+            IQueryable<TEntity> query,
             string orderBy = "", DataSortType dataSortType = DataSortType.Asc);
 
-        TEntity Read(long id, string includeProperties="");
-        
-        void Create(TEntity item);
+        TEntity Read(Guid id);
 
-        bool Exists(long id);
+        List<TEntity> Read(
+            Expression<Func<TEntity, bool>> filterExpression);
+
+        IQueryable<TEntity> GetQueryable();
+
+        TEntity Create(TEntity item);
+
+        bool Exists(Guid id);
 
         void Update(TEntity item);
 
-        void Delete(long id);
+        void Delete(Guid id);
 
     }
 }

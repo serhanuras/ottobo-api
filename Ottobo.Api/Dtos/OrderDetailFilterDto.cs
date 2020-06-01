@@ -1,3 +1,4 @@
+using System;
 using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
@@ -7,17 +8,13 @@ namespace Ottobo.Api.Dtos
 
         public long Id { get; set; }
 
-        public MasterData MasterData { get; set; }
-
+        public long StockId { get; set; }
+        
         public int Quantity { get; set; }
 
         public int PickedQuantity { get; set; }
-
-        public OrderType OrderType { get; set; }
         
-        public long OrderTypeId { get; set; }
-        
-        public long StockId { get; set; }
+        public Guid OrderId { get; set;}
 
     }
 }

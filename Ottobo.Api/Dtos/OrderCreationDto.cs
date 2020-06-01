@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Api.Dtos
 {
@@ -8,13 +9,17 @@ namespace Ottobo.Api.Dtos
         
         public DateTime Date { get; set; }
 
+        [Required(ErrorMessage = "The field with name {0} is required.")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "The field with name {0} is required.")]
         public int CityId { get; set; }
 
+        [Required(ErrorMessage = "The field with name {0} is required.")]
         public int TownId { get; set; }
-
-        public List<OrderDetailCreationDto> OrderDetails { get; set; }
+        
+        [Required(ErrorMessage = "The field with name {0} is required.")]
+        public Guid OrderTypeId { get; set; }
 
     }
 }

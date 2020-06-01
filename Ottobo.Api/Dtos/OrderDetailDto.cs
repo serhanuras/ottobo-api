@@ -1,3 +1,4 @@
+using System;
 using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
@@ -5,16 +6,17 @@ namespace Ottobo.Api.Dtos
     public class OrderDetailDto: IDto
     {
 
-        public long Id { get; set; }
-
-        public MasterData MasterData { get; set; }
+        public Guid Id { get; set; }
 
         public int Quantity { get; set; }
 
         public int PickedQuantity { get; set; }
+        
+        public StockDto Stock { get; set; }
+        
+        public OrderDto Order { get; set; }
 
-        public OrderTypeDto OrderType { get; set; }
-
+        public RobotTaskDto RobotTask { get; set; }
 
     }
 }

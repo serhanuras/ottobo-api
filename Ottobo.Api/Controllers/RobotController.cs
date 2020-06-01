@@ -1,17 +1,21 @@
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Ottobo.Api.Attributes;
 using Ottobo.Api.Dtos;
 using Ottobo.Entities;
 using Ottobo.Services;
 
 namespace Ottobo.Api.Controllers
 {
+    [ApiController]
+    [LowerCaseRoute()]
     public class RobotController: CustomControllerBase<Robot, RobotDto, RobotCreationDto, RobotFilterDto, RobotPatchDto>
     {
         
-        public RobotController(ILogger<Location> logger,
+        public RobotController(ILogger<RobotController> logger,
             IMapper mapper, 
             RobotService robotService) : base(logger, mapper, robotService)
         {
@@ -39,7 +43,7 @@ namespace Ottobo.Api.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(typeof(RobotDto), 200)]
         [HttpGet("{id}")]
-        public new ActionResult<RobotDto> Get(long id)
+        public new ActionResult<RobotDto> Get(Guid id)
         {
             return base.Get(id);
         }
@@ -60,10 +64,10 @@ namespace Ottobo.Api.Controllers
         /// Updating a Item
         /// </summary>
         /// <param name="id">Id of the order type to update</param>
-        /// <param name="updateDTO"></param>
+        /// <param name="updateDto"></param>
         /// <returns></returns>
-        [HttpPut("{id:int}")]
-        public new ActionResult Put(int id, RobotCreationDto updateDto)
+        [HttpPut("{id:Guid}")]
+        public new ActionResult Put(Guid id, RobotCreationDto updateDto)
         {
             return base.Put(id, updateDto);
         }
@@ -74,8 +78,8 @@ namespace Ottobo.Api.Controllers
         /// </summary>
         /// <param name="id">Id of the item to delete</param>
         /// <returns></returns>
-        [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        [HttpDelete("{id:Guid}")]
+        public new ActionResult Delete(Guid id)
         {
             return base.Delete(id);
         }   

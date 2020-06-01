@@ -3,20 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class PurchaseType:IEntity
+    public class PurchaseType:EntityBase
     {
-         [Key]
-        public long Id { get; set; }
 
-    
-        //[FirstLetterUppercase]
-        [Required(ErrorMessage = "The field with name {0} is required.")]
-        [StringLength(100)]
-        public string TypeName { get; set; }
+        public string Name { get; set; }
         
-        
-        public ICollection<MasterData> MasterDatas { get; set; }
-        
+        public List<MasterData> MasterDataList { get; set; }
+
 
     }
 }

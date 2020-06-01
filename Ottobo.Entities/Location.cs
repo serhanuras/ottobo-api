@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class Location: IEntity
+    public class Location: EntityBase
     {
-        [Key]
-        public long Id { get; set; }
+
+        public string Name { get; set; }
         
         public long MapId { get; set; }
         
@@ -15,5 +15,7 @@ namespace Ottobo.Entities
         public string YCoordinate { get; set; }
         
         public string Theate { get; set; }
+        
+        public ICollection<Stock> StockList { get; set; }
     }
 }

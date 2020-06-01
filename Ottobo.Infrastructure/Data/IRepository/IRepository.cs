@@ -9,9 +9,9 @@ using Ottobo.Entities;
 namespace Ottobo.Infrastructure.Data.IRepository
 {
     public interface IRepository<T> 
-        where T : class, IEntity
+        where T : class, IEntityBase
     {
-        T  Get(long id, string includeProperties);
+        T  Get(Guid id, string includeProperties);
 
         IEnumerable<T> GetAll(Expression<Func<T, bool>> filter,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy,
@@ -37,9 +37,9 @@ namespace Ottobo.Infrastructure.Data.IRepository
         
         T Update(T entity);
 
-        T Remove(long id);
+        T Remove(Guid id);
 
-        bool Exists(long id);
+        bool Exists(Guid id);
         
         T Remove(T entity);
     }

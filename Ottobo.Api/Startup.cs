@@ -46,6 +46,7 @@ namespace Ottobo.Api
             services.AddControllers(options => { options.Filters.Add(typeof(ExceptionFilter)); })
                 .AddNewtonsoftJson(options =>
                     {
+                        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                         options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver
                         {
@@ -125,16 +126,101 @@ namespace Ottobo.Api
                 .AddDefaultTokenProviders();
 
             services.AddTransient<HashService>();
-            services.AddScoped<MasterDataService>();
-            services.AddScoped<OrderDetailService>();
-            services.AddScoped<OrderService>();
-            services.AddScoped<OrderTypeService>();
-            services.AddScoped<PurchaseTypeService>();
-            services.AddScoped<StockService>();
-            services.AddScoped<StockTypeService>();
-            services.AddScoped<LocationService>();
             
             
+            services.AddScoped<MasterDataService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<MasterDataService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new MasterDataService(logger, unitOfWork, "PurchaseType");
+            });
+            
+            services.AddScoped<OrderDetailService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<OrderDetailService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new OrderDetailService(logger, unitOfWork, "Order,Stock>MasterData|Location,RobotTask");
+            });
+            
+            services.AddScoped<OrderService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<OrderService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new OrderService(logger, unitOfWork, "OrderType");
+            });
+            
+            services.AddScoped<OrderTypeService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<OrderTypeService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new OrderTypeService(logger, unitOfWork, "");
+            });
+            
+            services.AddScoped<PurchaseTypeService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<PurchaseTypeService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new PurchaseTypeService(logger, unitOfWork, "");
+            });
+            
+            services.AddScoped<StockService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<StockService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new StockService(logger, unitOfWork,  "MasterData,StockType,Location");
+            });
+            
+            services.AddScoped<StockTypeService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<StockTypeService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new StockTypeService(logger, unitOfWork,  "");
+            });
+            
+            services.AddScoped<LocationService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<LocationService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+                var orderDetailService = serviceProvider.GetService<OrderDetailService>();
+               
+                return new LocationService(logger, unitOfWork,  orderDetailService, "");
+            });
+            
+            services.AddScoped<RobotService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<RobotService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new RobotService(logger, unitOfWork,  "");
+            });
+            
+           
+            services.AddScoped<RobotTaskService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<RobotTaskService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new RobotTaskService(logger, unitOfWork,  "");
+            });
+
+
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc("v1", new OpenApiInfo

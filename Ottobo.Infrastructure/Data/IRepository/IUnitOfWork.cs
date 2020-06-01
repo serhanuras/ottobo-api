@@ -8,6 +8,6 @@ namespace Ottobo.Infrastructure.Data.IRepository
 
         void Save();
 
-        IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity;
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntityBase;
     }
 }

@@ -15,14 +15,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Ottobo.Api.Attributes;
 using Ottobo.Infrastructure.Data.PostgreSql;
 using Ottobo.Infrastructure.Extensions;
 
 namespace Ottobo.Api.Controllers
 {
     [ApiController]
-    [Route("api/accounts")]
-    public class AccountsController : ControllerBase
+    [LowerCaseRoute()]
+    public class AccountController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -30,7 +31,7 @@ namespace Ottobo.Api.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
-        public AccountsController(
+        public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
@@ -46,7 +47,7 @@ namespace Ottobo.Api.Controllers
 
         [ProducesResponseType(400)]
         [ProducesResponseType(typeof(UserToken), 200)]
-        [HttpPost("Create")]
+        [HttpPost("create")]
         public async Task<ActionResult<UserToken>> CreateUser([FromBody] UserInfo model)
         {
             var user = new ApplicationUser { UserName = model.EmailAddress, Email = model.EmailAddress };
@@ -62,7 +63,7 @@ namespace Ottobo.Api.Controllers
             }
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.EmailAddress,
@@ -78,7 +79,7 @@ namespace Ottobo.Api.Controllers
             }
         }
 
-        [HttpPost("RenewToken")]
+        [HttpPost("renewtoken")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<UserToken>> Renew()
         {
@@ -124,7 +125,7 @@ namespace Ottobo.Api.Controllers
 
         }
 
-        [HttpGet("Users")]
+        [HttpGet("users")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<ActionResult<List<UserDto>>> Get([FromQuery] PaginationDto paginationDTO)
         {
@@ -135,14 +136,14 @@ namespace Ottobo.Api.Controllers
             return _mapper.Map<List<UserDto>>(users);
         }
 
-        [HttpGet("Roles")]
+        [HttpGet("roles")]
        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<ActionResult<List<string>>> GetRoles()
         {
             return await _context.Roles.Select(x => x.Name).ToListAsync();
         }
 
-        [HttpPost("AssignRole")]
+        [HttpPost("assignrole")]
        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<ActionResult> AssignRole(EditRoleDto editRoleDTO)
         {
@@ -156,7 +157,7 @@ namespace Ottobo.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("RemoveRole")]
+        [HttpDelete("removerole")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<ActionResult> RemoveRole(EditRoleDto editRoleDTO)
         {

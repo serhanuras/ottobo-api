@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Api.Dtos 
@@ -37,9 +38,11 @@ namespace Ottobo.Api.Dtos
         public bool IsSignedOn { get; set; }
 
         public decimal PackageHeight { get; set; }
-
-        public long PurchaseTypeId { get; set; }
         
-        public StockCreationDto Stock { get; set; }
+        public string ImageUrl { get; set; }
+
+        [Required(ErrorMessage = "The field with name {0} is required.")]
+        public Guid PurchaseTypeId { get; set; }
+       
     }
 }

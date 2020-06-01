@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Ottobo.Api.Attributes;
 using Ottobo.Api.Dtos;
 using Ottobo.Entities;
 using Ottobo.Services;
@@ -11,17 +13,16 @@ using Ottobo.Services;
 namespace Ottobo.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class PurchaseTypeController : CustomControllerBase<PurchaseType, PurchaseTypeDto, PurchaseTypeCreationDto, PurchaseTypeFilterDto, PurchaseTypePatchDto>
+    [LowerCaseRoute()]
+    public class StockTypeController : CustomControllerBase<StockType, StockTypeDto, StockTypeCreationDto, StockTypeFilterDto, StockTypePatchDto>
     {
-        
-        public PurchaseTypeController(ILogger<PurchaseType> logger,
+        public StockTypeController(ILogger<StockTypeController> logger,
             IMapper mapper, 
-            PurchaseTypeService purchaseTypeService) : base(logger, mapper, purchaseTypeService)
+            StockTypeService stockTypeService) : base(logger, mapper, stockTypeService)
         {
             
         }
-
+        
         /// <summary>
         /// Getting all items.
         /// </summary>
@@ -30,7 +31,7 @@ namespace Ottobo.Api.Controllers
         [HttpGet("list")]
         //[ResponseCache(Duration = 60)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public  new ActionResult<IEnumerable<PurchaseTypeDto>> Get([FromQuery] PaginationDto paginationDto)
+        public new ActionResult<IEnumerable<StockTypeDto>> Get([FromQuery] PaginationDto paginationDto)
         {
             return base.Get(paginationDto);
         }
@@ -41,9 +42,9 @@ namespace Ottobo.Api.Controllers
         /// <param name="id">Id of the item to get</param>
         /// <returns></returns>
         [ProducesResponseType(400)]
-        [ProducesResponseType(typeof(OrderTypeDto), 200)]
+        [ProducesResponseType(typeof(StockDto), 200)]
         [HttpGet("{id}")]
-        public new ActionResult<PurchaseTypeDto> Get(long id)
+        public new ActionResult<StockTypeDto> Get(Guid id)
         {
             return base.Get(id);
         }
@@ -54,7 +55,7 @@ namespace Ottobo.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public new ActionResult Post(PurchaseTypeCreationDto creationDto)
+        public new ActionResult Post(StockTypeCreationDto creationDto)
         {
             return base.Post(creationDto);
         }
@@ -66,25 +67,22 @@ namespace Ottobo.Api.Controllers
         /// <param name="id">Id of the order type to update</param>
         /// <param name="updateDTO"></param>
         /// <returns></returns>
-        [HttpPut("{id:int}")]
-        public new ActionResult Put(int id, PurchaseTypeCreationDto updateDTO)
+        [HttpPut("{id:Guid}")]
+        public new ActionResult Put(Guid id, StockTypeCreationDto updateDTO)
         {
             return base.Put(id, updateDTO);
         }
-        
+
 
         /// <summary>
         /// Delete a item
         /// </summary>
         /// <param name="id">Id of the item to delete</param>
         /// <returns></returns>
-        [HttpDelete("{id:int}")]
-        public  ActionResult Delete(int id)
+        [HttpDelete("{id:Guid}")]
+        public new ActionResult Delete(Guid id)
         {
             return base.Delete(id);
-        }
-
-       
-
+        }   
     }
 }

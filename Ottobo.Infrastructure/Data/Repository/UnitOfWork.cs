@@ -17,7 +17,7 @@ namespace Ottobo.Infrastructure.Data.Repository
             //OrderType = new OrderTypeRepository(_db);
         }
 
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntityBase
         {
             var repositoryName = typeof(TEntity).Name;
 

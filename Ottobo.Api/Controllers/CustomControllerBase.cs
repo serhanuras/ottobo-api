@@ -1,9 +1,11 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
+using Ottobo.Api.Attributes;
 using Ottobo.Api.Dtos;
 using Ottobo.Api.RouteResult;
 using Ottobo.Entities;
@@ -11,10 +13,10 @@ using Ottobo.Services;
 
 namespace Ottobo.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [LowerCaseRoute()]
     public abstract class CustomControllerBase<TEntity, TDto, TCreationDto, TFilterDto, TPatchDto>: ControllerBase
-        where TEntity:class, IEntity
+        where TEntity:class, IEntityBase
         where TDto: class, IDto
         where TCreationDto: class, ICreationDto
         where TFilterDto: class, IFilterDto
@@ -24,18 +26,15 @@ namespace Ottobo.Api.Controllers
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IServiceBase<TEntity> _service;
-        private readonly string _includeProperties;
 
         public CustomControllerBase(
             ILogger logger,
             IMapper mapper, 
-            IServiceBase<TEntity> service,
-            string includeProperties="")
+            IServiceBase<TEntity> service)
         {
             _logger = logger;
             _mapper = mapper;
             _service = service;
-            _includeProperties = includeProperties;
         }
         
        
@@ -44,7 +43,7 @@ namespace Ottobo.Api.Controllers
         {
             if (paginationDto == null)
             {
-                var list = _service.Read(_includeProperties);
+                var list = _service.Read();
 
                 var dtoList = _mapper.Map<List<TDto>>(list);
 
@@ -53,7 +52,7 @@ namespace Ottobo.Api.Controllers
             else
             {
                 
-                var list = _service.Read(_includeProperties, paginationDto.Page, paginationDto.RecordsPerPage);
+                var list = _service.Read(paginationDto.Page, paginationDto.RecordsPerPage);
 
                 var dtoList = _mapper.Map<List<TDto>>(list);
 
@@ -62,7 +61,7 @@ namespace Ottobo.Api.Controllers
         }
         
         [ApiExplorerSettings(IgnoreApi = true)]
-        public  ActionResult<TDto> Get(long id)
+        public  ActionResult<TDto> Get(Guid id)
         {
 
             if (!ModelState.IsValid)
@@ -70,7 +69,7 @@ namespace Ottobo.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var item = _service.Read(id, this._includeProperties);
+            var item = _service.Read(id);
             
             if (item == null)
             {
@@ -87,18 +86,17 @@ namespace Ottobo.Api.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult Post(TCreationDto creationDto)
         {
-            var item = _mapper.Map<TEntity>(creationDto);
-                                           
-            _service.Create(item);
+
+            TEntity item = _service.Create(_mapper.Map<TEntity>(creationDto));
             
-            var itemDto = _mapper.Map<TCreationDto>(item);
+            var itemDto = _mapper.Map<TDto>(item);
             
             return new CustomCreatedAtRouteResult(item.Id, itemDto);
         }
         
         
         [ApiExplorerSettings(IgnoreApi = true)]
-        public  ActionResult Put(int id,  TCreationDto updateDTO)
+        public  ActionResult Put(Guid id,  TCreationDto updateDTO)
         {
 
             var item = _mapper.Map<TEntity>(updateDTO);
@@ -110,14 +108,14 @@ namespace Ottobo.Api.Controllers
         }
         
         [ApiExplorerSettings(IgnoreApi = true)]
-        public  ActionResult Patch(int id, JsonPatchDocument<TPatchDto> patchDocument)
+        public  ActionResult Patch(Guid id, JsonPatchDocument<TPatchDto> patchDocument)
         {
             if (patchDocument == null)
             {
                 return BadRequest();
             }
 
-            var item  = _service.Read(id, _includeProperties);
+            var item  = _service.Read(id);
 
             var tPatchDto = _mapper.Map<TPatchDto>(item);
 
@@ -139,7 +137,7 @@ namespace Ottobo.Api.Controllers
         
         
         [ApiExplorerSettings(IgnoreApi = true)]
-        public ActionResult Delete(long id)
+        public ActionResult Delete(Guid id)
         {
 
           _service.Delete(id);

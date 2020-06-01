@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Entities
 {
-    public class Robot: IEntity
+    public class Robot: EntityBase
     {
-        [Key]
-        public long Id { get; set; }
-        
+
         public string Name { get; set; }
+        
+        public ICollection<RobotTask> RobotTaskList { get; set; }
         
     }
 }

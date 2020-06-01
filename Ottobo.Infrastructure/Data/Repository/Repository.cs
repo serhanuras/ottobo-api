@@ -10,7 +10,7 @@ using Ottobo.Infrastructure.Extensions;
 
 namespace Ottobo.Infrastructure.Data.Repository
 {
-     public class Repository<T> : IRepository<T> where T : class, IEntity
+     public class Repository<T> : IRepository<T> where T : class, IEntityBase
     {
         protected readonly DbContext Context;
         internal readonly DbSet<T> DbSet;
@@ -35,7 +35,7 @@ namespace Ottobo.Infrastructure.Data.Repository
             return entity;
         }
 
-        public T Get(long id, string includeProperties)
+        public T Get(Guid id, string includeProperties)
         {
             IQueryable<T> query = DbSet;
             
@@ -47,7 +47,8 @@ namespace Ottobo.Infrastructure.Data.Repository
             //     }
             // }
             
-            query = AddIncludes(query, includeProperties);
+            if(!String.IsNullOrWhiteSpace(includeProperties))
+                query = AddIncludes(query, includeProperties);
 
             var result = query.Where(x => x.Id == id).AsNoTracking().ToList();
 
@@ -89,7 +90,7 @@ namespace Ottobo.Infrastructure.Data.Repository
         }
         
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = null,
             int page = 1,
@@ -97,9 +98,9 @@ namespace Ottobo.Infrastructure.Data.Repository
         {
             IQueryable<T> query = DbSet;
 
-            if (filter != null)
+            if (predicate != null)
             {
-                query = query.Where(filter);
+                query = query.Where(predicate);
             }
             //include properties will be comma seperated
             // if(includeProperties != null)
@@ -111,7 +112,8 @@ namespace Ottobo.Infrastructure.Data.Repository
             //     }
             // }
 
-            query = AddIncludes(query, includeProperties);
+            if(!String.IsNullOrWhiteSpace(includeProperties))
+                query = AddIncludes(query, includeProperties);
 
             query = query.Paginate(page, recordPerPage);
             
@@ -172,7 +174,7 @@ namespace Ottobo.Infrastructure.Data.Repository
             return  query.FirstOrDefault();
         }
 
-        public T Remove(long id)
+        public T Remove(Guid id)
         {
             T entityToRemove = DbSet.Find(id);
             
@@ -184,7 +186,7 @@ namespace Ottobo.Infrastructure.Data.Repository
             return Remove(entityToRemove);
         }
 
-        public bool Exists(long id)
+        public bool Exists(Guid id)
         {
             return DbSet.Any(x => x.Id == id);
         }
