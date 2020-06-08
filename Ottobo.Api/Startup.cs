@@ -253,6 +253,15 @@ namespace Ottobo.Api
             });
             
             
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                    builder => builder.
+                        WithOrigins("*").
+                        WithMethods("GET", "POST", "GET, POST, PUT, DELETE, OPTIONS").
+                        AllowAnyOrigin());
+            });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -262,30 +271,22 @@ namespace Ottobo.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseCors();
-                // This policy would be applied at the Web API level
-                //app.UseCors(builder => 
-                //builder.WithOrigins("https://www.apirequest.io").WithMethods("GET", "POST").AllowAnyHeader());
-            }
+          
 
             #if DEBUG
             //app.UseRequestResponseLogging<RequestResponseLoggingMiddleware>();
             #endif
 
             app.UseSwagger();
-
             app.UseSwaggerUI(config => { config.SwaggerEndpoint("/swagger/v1/swagger.json", "Ottobo.Api API"); });
+            app.UseMiddleware<LoggingMiddleware>();
+            app.UseMiddleware<OptionsMiddleware>();
             
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseResponseCaching();
-
             app.UseAuthorization();
-
+            app.UseCors (options => options.AllowAnyOrigin ());
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

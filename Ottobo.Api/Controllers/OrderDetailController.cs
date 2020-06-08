@@ -83,12 +83,12 @@ namespace Ottobo.Api.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(typeof(OrderDetailDto), 200)]
         [HttpGet("getbylocationid/{robotTaskId}/{locationId}")]
-        public new ActionResult<List<OrderDetailDto>> GetByLocationId(Guid robotTaskId, Guid locationId)
+        public new ActionResult<List<RobotOrderDetailDto>> GetByLocationId(Guid robotTaskId, Guid locationId)
         {
             List<OrderDetail> orderDetails =
                 _orderDetailService.GetByLocationId(robotTaskId, locationId);
             
-            return _mapper.Map<List<OrderDetail>, List<OrderDetailDto>>(orderDetails);
+            return _mapper.Map<List<OrderDetail>, List<RobotOrderDetailDto>>(orderDetails);
         }
 
 

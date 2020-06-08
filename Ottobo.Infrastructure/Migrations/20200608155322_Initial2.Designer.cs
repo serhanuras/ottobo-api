@@ -10,8 +10,8 @@ using Ottobo.Infrastructure.Data.PostgreSql;
 namespace Ottobo.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200531183520_Initial1")]
-    partial class Initial1
+    [Migration("20200608155322_Initial2")]
+    partial class Initial2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,6 +172,66 @@ namespace Ottobo.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("users_token");
+                });
+
+            modelBuilder.Entity("Ottobo.Entities.ApiLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ActionBy")
+                        .HasColumnName("action_by")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ControllerName")
+                        .HasColumnName("controller_name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnName("created_on")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnName("end_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Exception")
+                        .HasColumnName("exception")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("LastAccessed")
+                        .HasColumnName("last_accessed")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("LogType")
+                        .HasColumnName("log_type")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MethodName")
+                        .HasColumnName("method_name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RequestBody")
+                        .HasColumnName("request_body")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResponseBody")
+                        .HasColumnName("response_body")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnName("start_date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnName("updated_on")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("api_logs");
                 });
 
             modelBuilder.Entity("Ottobo.Entities.ApplicationUser", b =>

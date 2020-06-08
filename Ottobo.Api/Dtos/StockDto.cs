@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Ottobo.Entities;
 
 namespace Ottobo.Api.Dtos
@@ -13,7 +14,7 @@ namespace Ottobo.Api.Dtos
 
         public string LocationLevel { get; set; }
 
-        public MasterDataDto MasterData { get; set; }
+        public List<MasterDataDto> MasterDataList { get; set; }
 
         public StockTypeDto StockType { get; set; }
 

@@ -10,5 +10,7 @@ namespace Ottobo.Api.Dtos
         
         public string Name { get; set; }
         
+        public Guid RobotId { get; set; }
+        
     }
 }

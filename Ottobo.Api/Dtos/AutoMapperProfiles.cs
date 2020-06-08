@@ -88,8 +88,25 @@ namespace Ottobo.Api.Dtos
                 .ForMember(l => l.YCoordinate,
                     options => options.MapFrom(x => x.Stock.Location.YCoordinate));
 
-
+            CreateMap<OrderDetail, RobotOrderDetailDto>()
+                .ForMember(r => r.Barcode,
+                    options => options.MapFrom(o => o.Stock.MasterData.Barcode))
+                .ForMember(r => r.BasketId,
+                    options => options.MapFrom(o => o.BasketId))
+                .ForMember(r => r.ImageUrl,
+                    options => options.MapFrom(o => o.Stock.MasterData.ImageUrl))
+                .ForMember(r => r.OrderCode,
+                    options => options.MapFrom(o => o.Stock.MasterData.SkuCode))
+                .ForMember(r => r.OrderName,
+                    options => options.MapFrom(o => o.Stock.MasterData.SkuName))
+                .ForMember(r => r.OrderId,
+                    options => options.MapFrom(o => o.Id))
+                .ForMember(r => r.Quantity,
+                    options => options.MapFrom(o => o.Quantity))
+                .ForMember(r => r.TrackId,
+                    options => options.MapFrom(o => o.BasketId));
         }
+        
 
         private void AccountMapping()
         {

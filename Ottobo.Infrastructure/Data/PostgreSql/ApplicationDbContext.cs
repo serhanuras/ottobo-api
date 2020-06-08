@@ -144,18 +144,7 @@ namespace Ottobo.Infrastructure.Data.PostgreSql
          public DbSet<Stock> Stocks { get; set; }
          
          public DbSet<StockType> StockTypes { get; set; }
-
          
-
-         
-         
-         
-         
-         
-    
-        
-         
-        
-
+         public DbSet<ApiLog> ApiLogs { get; set; }
     }
 }
