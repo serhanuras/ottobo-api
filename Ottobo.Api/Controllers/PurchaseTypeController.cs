@@ -30,7 +30,7 @@ namespace Ottobo.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [HttpGet("list")]
-        //[ResponseCache(Duration = 60)]
+        [ResponseCache(Duration = 60)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public  new ActionResult<IEnumerable<PurchaseTypeDto>> Get([FromQuery] PaginationDto paginationDto)
         {
