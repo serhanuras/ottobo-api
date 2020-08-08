@@ -42,5 +42,7 @@ namespace Ottobo.Infrastructure.Data.IRepository
         bool Exists(Guid id);
         
         T Remove(T entity);
+        
+        long Count();
     }
 }

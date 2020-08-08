@@ -57,14 +57,35 @@ namespace Ottobo.Api
                 .AddXmlDataContractSerializerFormatters();
 
 
-            #if DEBUG
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAPIRequestIO",
-                    builder => builder.WithOrigins("https://www.apirequest.io").WithMethods("GET", "POST")
-                        .AllowAnyHeader());
-            });
-            #endif
+            
+            
+           services.AddCors(options =>
+           {
+               options.AddPolicy("AllowSpecificOrigins",
+                   builder => builder.WithOrigins("http://www.apirequest.io","http://localhost:3000","http://admin.ottobotest.com")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod());
+               
+              
+           });
+           
+        
+            
+           
+          /*
+           services.AddCors(options =>
+           {
+               options.AddPolicy("AllowAll", builder =>
+               {
+                   builder.AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowAnyOrigin()
+                       .AllowCredentials()
+                       .WithExposedHeaders("Location"); // params string[]
+               });
+           });
+           */
+          
 
             
             services
@@ -143,7 +164,7 @@ namespace Ottobo.Api
                 var logger = serviceProvider.GetService<ILogger<OrderDetailService>>();
                 var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
                
-                return new OrderDetailService(logger, unitOfWork, "Order,Stock>MasterData|Location,RobotTask");
+                return new OrderDetailService(logger, unitOfWork, "Order,Stock,RobotTask,Stock.MasterData,Stock.Location");
             });
             
             services.AddScoped<OrderService>(conf =>
@@ -152,7 +173,7 @@ namespace Ottobo.Api
                 var logger = serviceProvider.GetService<ILogger<OrderService>>();
                 var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
                
-                return new OrderService(logger, unitOfWork, "OrderType");
+                return new OrderService(logger, unitOfWork, "OrderType,OrderDetailList.Stock,OrderDetailList.Stock.MasterData,OrderDetailList.Stock.Location,OrderDetailList.Stock.StockType");
             });
             
             services.AddScoped<OrderTypeService>(conf =>
@@ -253,14 +274,6 @@ namespace Ottobo.Api
             });
             
             
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowOrigin",
-                    builder => builder.
-                        WithOrigins("*").
-                        WithMethods("GET", "POST", "GET, POST, PUT, DELETE, OPTIONS").
-                        AllowAnyOrigin());
-            });
             
         }
 
@@ -280,13 +293,13 @@ namespace Ottobo.Api
             app.UseSwagger();
             app.UseSwaggerUI(config => { config.SwaggerEndpoint("/swagger/v1/swagger.json", "Ottobo.Api API"); });
             app.UseMiddleware<LoggingMiddleware>();
-            app.UseMiddleware<OptionsMiddleware>();
+            //app.UseMiddleware<OptionsMiddleware>();
             
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseResponseCaching();
             app.UseAuthorization();
-            app.UseCors (options => options.AllowAnyOrigin ());
+            app.UseCors("AllowSpecificOrigins");
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

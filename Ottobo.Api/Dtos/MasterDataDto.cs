@@ -35,7 +35,7 @@ namespace Ottobo.Api.Dtos
 
         public decimal PackageHeight { get; set; }
 
-        public PurchaseTypeDto PurchaseType { get; set; }
+        public string PurchaseType { get; set; }
         
         public string ImageUrl { get; set; }
     }

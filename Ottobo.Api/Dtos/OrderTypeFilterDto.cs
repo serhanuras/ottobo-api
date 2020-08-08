@@ -8,5 +8,7 @@ namespace Ottobo.Api.Dtos
         
         public string Name { get; set; }
 
+        public string OrderingField { get; set; }
+        public bool AscendingOrder { get; set; }
     }
 }

@@ -37,7 +37,13 @@ namespace Ottobo.Api.Controllers
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public new ActionResult<IEnumerable<RobotTaskDto>> Get([FromQuery] PaginationDto paginationDto)
         {
-            return base.Get(paginationDto);
+            List<RobotTaskDto> FilterDataMethod(PaginationDto paginationDto, RobotTaskFilterDto robotTaskFilterDto)
+            {
+            
+                return null;
+            }
+            
+            return base.Get(paginationDto,FilterDataMethod);
         }
 
         /// <summary>

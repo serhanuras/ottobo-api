@@ -52,9 +52,7 @@ namespace Ottobo.Services
             {
                 try
                 {
-
-                    IQueryable<Entities.MasterData> masterDatasQueryable =
-                        _unitOfWork.GetRepository<Entities.MasterData>().Queryable();
+                    
 
                     query = query.OrderBy(
                         $"{orderBy} {(dataSortType == DataSortType.Asc ? "ascending" : "descending")}");
@@ -129,6 +127,11 @@ namespace Ottobo.Services
             _repository.Remove(id);
 
             _unitOfWork.Save();
+        }
+        
+        public long Count()
+        {
+            return _repository.Count();
         }
     }
 

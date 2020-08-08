@@ -8,6 +8,7 @@ namespace Ottobo.Api.Dtos
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
+        
 
         public DateTime Date { get; set; }
 

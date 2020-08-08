@@ -35,7 +35,13 @@ namespace Ottobo.Api.Controllers
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public new ActionResult<IEnumerable<LocationDto>> Get([FromQuery] PaginationDto paginationDto)
         {
-            return base.Get(paginationDto);
+            List<LocationDto> FilterDataMethod(PaginationDto paginationDto, LocationFilterDto locationFilterDto)
+            {
+            
+                return null;
+            }
+          
+            return base.Get(paginationDto, FilterDataMethod);
         }
 
         /// <summary>
@@ -110,6 +116,6 @@ namespace Ottobo.Api.Controllers
         public new ActionResult<LocationDto> GetNextLocation(Guid robotTaskId, [FromQuery] Guid? currentLocationId)
         {
             return this._mapper.Map<LocationDto>( this._locationService.GetNextLocation(robotTaskId, currentLocationId));
-        }   
+        }
     }
 }

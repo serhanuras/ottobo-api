@@ -10,6 +10,8 @@ namespace Ottobo.Api.Dtos
         public string YCoordinate { get; set; }
         
         public string Theate { get; set; }
-        
+
+        public string OrderingField { get; set; }
+        public bool AscendingOrder { get; set; }
     }
 }

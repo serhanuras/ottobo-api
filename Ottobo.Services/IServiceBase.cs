@@ -25,6 +25,8 @@ namespace Ottobo.Services
         TEntity Create(TEntity item);
 
         bool Exists(Guid id);
+        
+        long Count();
 
         void Update(TEntity item);
 

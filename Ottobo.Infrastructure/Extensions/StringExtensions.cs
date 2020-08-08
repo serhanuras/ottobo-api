@@ -15,5 +15,19 @@ namespace Ottobo.Infrastructure.Extensions
                         : character.ToString()))
                 .ToLower();
         }
+
+        public static string CapitalizeFirstLetter(this string str)
+        {
+            string[] strings = str.Split("_");
+            for (int i = 0; i < strings.Length; i++)
+            {
+                char[] characters = strings[i].ToCharArray();
+                characters[0] = characters[0].ToString().ToUpper()[0];
+
+                strings[i] = String.Join("", characters);
+            }
+            
+            return String.Join("", strings);
+        }
     }
 }

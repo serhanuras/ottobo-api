@@ -42,11 +42,26 @@ namespace Ottobo.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [HttpGet("list")]
-        //[ResponseCache(Duration = 60)]
+        [ResponseCache(Duration = 60)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public new ActionResult<IEnumerable<MasterDataDto>> Get([FromQuery] PaginationDto paginationDto)
         {
-            return base.Get(paginationDto);
+            List<MasterDataDto> FilterDataMethod(PaginationDto paginationDto, MasterDataFilterDto masterDataFilterDto)
+            {
+            
+                List<MasterData> masterDatas = this._masterDataService.Filter(
+                    masterDataFilterDto.SkuCode,
+                    masterDataFilterDto.Barcode,
+                    masterDataFilterDto.SkuName,
+                    !string.IsNullOrWhiteSpace(masterDataFilterDto.OrderingField) ? masterDataFilterDto.OrderingField : null,
+                    masterDataFilterDto.AscendingOrder ? DataSortType.Asc : DataSortType.Desc,
+                    paginationDto.Page,
+                    paginationDto.RecordsPerPage);
+
+                return this._mapper.Map<List<MasterData>, List<MasterDataDto>>(masterDatas);
+            }
+            
+            return base.Get(paginationDto, FilterDataMethod);
         }
 
         /// <summary>
@@ -116,25 +131,7 @@ namespace Ottobo.Api.Controllers
         }
 
 
-        /// <summary>
-        /// Getting paged filtered orders.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("filter")]
-        public ActionResult<List<MasterDataDto>> Filter([FromQuery] PaginationDto paginationDto,
-            MasterDataFilterDto masterDataFilterDto)
-        {
-            List<MasterData> masterDatas = this._masterDataService.Filter(
-                masterDataFilterDto.SkuCode,
-                masterDataFilterDto.Barcode,
-                masterDataFilterDto.SkuName,
-                !string.IsNullOrWhiteSpace(masterDataFilterDto.OrderingField) ? masterDataFilterDto.OrderingField : null,
-                masterDataFilterDto.AscendingOrder ? DataSortType.Asc : DataSortType.Desc,
-                paginationDto.Page,
-                paginationDto.RecordsPerPage);
-
-            return Ok(this._mapper.Map<List<MasterData>, List<MasterDataDto>>(masterDatas));
-
-        }
+        
+       
     }
 }

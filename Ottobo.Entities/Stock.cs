@@ -6,15 +6,13 @@ namespace Ottobo.Entities
 {
     public class Stock : EntityBase
     {
-
-
+        
         public int Quantity { get; set; }
 
         public DateTime LastMovementDate { get; set; }
 
         public string LocationLevel { get; set; }
-        
-        
+
         public MasterData MasterData { get; set; }
         
         public Guid MasterDataId { get; set; }

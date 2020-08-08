@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Logging;
 using Ottobo.Api.Attributes;
@@ -45,7 +46,29 @@ namespace Ottobo.Api.Controllers
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public new ActionResult<IEnumerable<OrderDto>> Get([FromQuery] PaginationDto paginationDto)
         {
-            return base.Get(paginationDto);
+            List<OrderDto> FilterDataMethod(PaginationDto paginationDto, OrderFilterDto orderFilterDto)
+            {
+
+                orderFilterDto.StartDate = orderFilterDto.Date;
+                orderFilterDto.EndDate = orderFilterDto.Date.AddDays(1);
+                
+                List<Order> orders = _orderService.Filter(
+                    orderFilterDto.Name,
+                    orderFilterDto.CityId,
+                    orderFilterDto.TownId,
+                    orderFilterDto.StartDate,
+                    orderFilterDto.EndDate,
+                    !string.IsNullOrWhiteSpace(orderFilterDto.OrderingField) ? orderFilterDto.OrderingField : null,
+                    orderFilterDto.AscendingOrder ? DataSortType.Asc : DataSortType.Desc,
+                    paginationDto.Page,
+                    paginationDto.RecordsPerPage
+                );
+
+                return this._mapper.Map<List<Order>, List<OrderDto>>(orders);
+            }
+            
+            ActionResult<IEnumerable<OrderDto>> orderDtos = base.Get(paginationDto, FilterDataMethod);
+            return orderDtos;
         }
 
         /// <summary>
@@ -110,29 +133,7 @@ namespace Ottobo.Api.Controllers
         }
 
 
-        /// <summary>
-        /// Getting paged filtered orders.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("filter")]
-        public ActionResult<List<OrderDto>> Filter([FromQuery] PaginationDto paginationDto,
-            OrderFilterDto orderFilterDto)
-        {
-
-            List<Order> orders = _orderService.Filter(
-                orderFilterDto.Name,
-                orderFilterDto.CityId,
-                orderFilterDto.TownId,
-                orderFilterDto.StartDate,
-                orderFilterDto.EndDate,
-                !string.IsNullOrWhiteSpace(orderFilterDto.OrderingField) ? orderFilterDto.OrderingField : null,
-                orderFilterDto.AscendingOrder ? DataSortType.Asc : DataSortType.Desc,
-                paginationDto.Page,
-                paginationDto.RecordsPerPage
-            );
-
-
-            return Ok(this._mapper.Map<List<Order>, List<OrderDto>>(orders));
-        }
+        
+          
     }
 }

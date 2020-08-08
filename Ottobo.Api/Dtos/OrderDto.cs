@@ -16,8 +16,10 @@ namespace Ottobo.Api.Dtos
         public int CityId { get; set; }
 
         public int TownId { get; set; }
+
+        public string OrderType { get; set; }
         
-        public OrderTypeDto OrderType { get; set; }
+        public ICollection<OrderDetailDto> OrderDetailList { get; set; }
 
     }
 }

@@ -23,7 +23,7 @@ namespace Ottobo.Services
             if (!string.IsNullOrWhiteSpace(name))
             {
                 orderQueryable = orderQueryable
-                    .Where(x => x.Name.Contains(name));
+                    .Where(x => x.Name.ToUpper().Contains(name.ToUpper()));
             }
 
             if (cityId != 0)

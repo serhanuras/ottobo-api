@@ -16,5 +16,7 @@ namespace Ottobo.Api.Dtos
         
         public Guid OrderId { get; set;}
 
+        public string OrderingField { get; set; }
+        public bool AscendingOrder { get; set; }
     }
 }

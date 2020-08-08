@@ -64,6 +64,9 @@ namespace Ottobo.Infrastructure.Data.Repository
             {
                 foreach(var includeProperty in includeProperties.Split(new char[] { ','}, StringSplitOptions.RemoveEmptyEntries))
                 {
+                    queryable = queryable.Include(includeProperty);
+                    
+                    /*
                     if (includeProperty.Split(new char[] {'>'}, StringSplitOptions.RemoveEmptyEntries).Length == 1)
                     {
                         queryable = queryable.Include(includeProperty);
@@ -83,6 +86,7 @@ namespace Ottobo.Infrastructure.Data.Repository
                             queryable = queryable.Include(includePath);
                         }
                     }
+                    */
                 }
             }
 
@@ -196,6 +200,11 @@ namespace Ottobo.Infrastructure.Data.Repository
             DbSet.Remove(entity);
 
             return entity;
+        }
+        
+        public long Count()
+        {
+            return DbSet.Count();
         }
     }
 }
