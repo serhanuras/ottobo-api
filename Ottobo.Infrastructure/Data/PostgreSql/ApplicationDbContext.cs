@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +10,7 @@ using Ottobo.Entities;
 
 namespace Ottobo.Infrastructure.Data.PostgreSql
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<long>, long, IdentityUserClaim<long>, IdentityUserRole<long>, IdentityUserLogin<long>, IdentityRoleClaim<long>, IdentityUserToken<long>>
+    public class ApplicationDbContext : DbContext
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -24,16 +25,7 @@ namespace Ottobo.Infrastructure.Data.PostgreSql
             modelBuilder.HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SequenceHiLo);
             //modelBuilder.ForNpgsqlUseSequenceHiLo();
             modelBuilder.UseHiLo();
-
-            modelBuilder.Entity<ApplicationUser>().ToTable("Users");
-            modelBuilder.Entity<IdentityRole<long>>().ToTable("Roles");
-            modelBuilder.Entity<IdentityUserClaim<long>>().ToTable("UsersClaim");
-            modelBuilder.Entity<IdentityRoleClaim<long>>().ToTable("RolesClaim");
-
-            modelBuilder.Entity<IdentityUserLogin<long>>().ToTable("UsersLogin");
-            modelBuilder.Entity<IdentityUserRole<long>>().ToTable("UsersRole");
-            modelBuilder.Entity<IdentityUserToken<long>>().ToTable("UsersToken");
-
+            
 
             //MASTER DATA FLUENT API
             modelBuilder.Entity<MasterData>()
@@ -86,6 +78,13 @@ namespace Ottobo.Infrastructure.Data.PostgreSql
                 .HasOne(s => s.MasterData)
                 .WithOne(e => e.Stock)
                 .HasForeignKey<Stock>(s => s.MasterDataId);
+            
+            
+            modelBuilder.Entity<User>()
+                .HasOne(e => e.Role)
+                .WithMany(s => s.Users)
+                .HasForeignKey(e => e.RoleId);
+
 
             ApplySnakeCaseNames(modelBuilder);
 
@@ -146,5 +145,10 @@ namespace Ottobo.Infrastructure.Data.PostgreSql
          public DbSet<StockType> StockTypes { get; set; }
          
          public DbSet<ApiLog> ApiLogs { get; set; }
+         
+         public DbSet<User> Users { get; set; }
+         
+         public DbSet<Role> Roles { get; set; }
+         
     }
 }

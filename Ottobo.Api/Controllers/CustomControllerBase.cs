@@ -23,7 +23,6 @@ namespace Ottobo.Api.Controllers
         where TCreationDto: class, ICreationDto
         where TFilterDto: class, IFilterDto
         where TPatchDto : class, IPatchDto
-    
     {
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
@@ -80,7 +79,7 @@ namespace Ottobo.Api.Controllers
                     
                     if (query.Key.ToString() == "_order")
                     {
-                        if(query.Key.ToString()=="ASC")
+                        if(query.Value.ToString()=="ASC")
                             jsonFilterData += $"\"AscendingOrder\":true,";
                         else
                             jsonFilterData += $"\"AscendingOrder\":false,";
@@ -233,9 +232,11 @@ namespace Ottobo.Api.Controllers
         public ActionResult Delete(Guid id)
         {
 
+           var entity = _service.Read(id);
+           
           _service.Delete(id);
 
-            return NoContent();
+          return Ok(entity);
         }
         
         

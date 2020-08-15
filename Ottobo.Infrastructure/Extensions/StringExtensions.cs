@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Ottobo.Infrastructure.Extensions
 {
@@ -28,6 +30,18 @@ namespace Ottobo.Infrastructure.Extensions
             }
             
             return String.Join("", strings);
+        }
+
+        public static string HashPassword(this string password, string saltKey)
+        {
+            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt:  Encoding.ASCII.GetBytes(saltKey),
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8));
+
+            return hashed;
         }
     }
 }

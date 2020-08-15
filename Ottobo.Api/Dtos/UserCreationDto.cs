@@ -1,24 +1,28 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ottobo.Api.Dtos
 {
-    public class UserInfoDto : IDto
+    public class UserCreationDto:ICreationDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         
         [EmailAddress]
         [Required]
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
+        
         [Required]
         public string Password { get; set; }
+        
+        
+        public string CurrentPassword { get; set; }
         
         [Required]
         public string FirstName { get; set; }
         
         [Required]
         public string LastName { get; set; }
-
         
+        [Required]
+        public string RoleId { get; set; }
     }
 }

@@ -139,9 +139,16 @@ namespace Ottobo.Api.Dtos
         {
             //CreateMap<ApplicationUser, UserDTO>().ReverseMap();
 
-            CreateMap<ApplicationUser, UserDto>()
-                .ForMember(x => x.EmailAddress, options => options.MapFrom(x => x.Email))
-                .ForMember(x => x.UserId, options => options.MapFrom(x => x.Id));
+            CreateMap<User, UserDto>()
+                .ForMember(x => x.Email, options => options.MapFrom(x => x.Email))
+                .ForMember(x => x.Id, options => options.MapFrom(x => x.Id))
+                .ForMember(x => x.Role, options => options.MapFrom(x => x.Role.Name))
+                .ForMember(x => x.RoleId, options => options.MapFrom(x => x.Role.Id)).ReverseMap();
+
+
+            CreateMap<UserCreationDto, User>().ReverseMap();
+            
+            CreateMap<Role, RoleDto>().ReverseMap();
         }
 
         private void LocationMapping()

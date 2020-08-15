@@ -8,5 +8,10 @@ namespace Ottobo.Infrastructure.Exceptions
         {
             
         }
+        
+        public NotFoundException(string message):base(message)
+        {
+           
+        }
     }
 }

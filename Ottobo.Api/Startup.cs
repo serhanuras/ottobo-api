@@ -6,13 +6,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -64,6 +63,7 @@ namespace Ottobo.Api
                options.AddPolicy("AllowSpecificOrigins",
                    builder => builder.WithOrigins("http://www.apirequest.io","http://localhost:3000","http://admin.ottobotest.com")
                        .AllowAnyHeader()
+                       .WithOrigins("*").WithMethods("GET", "POST", "GET, POST, PUT, DELETE, OPTIONS")
                        .AllowAnyMethod());
                
               
@@ -86,44 +86,9 @@ namespace Ottobo.Api
            });
            */
           
+          
 
             
-            services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
-                        ClockSkew = TimeSpan.Zero
-                    };
-                });
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = false;
-
-                // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
-
-                // // Cookie settings
-                // options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
-                // options.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
-
-                // User settings
-                options.User.RequireUniqueEmail = true;
-            });
 
             services.AddHttpContextAccessor();
             
@@ -142,9 +107,7 @@ namespace Ottobo.Api
             services.AddTransient<CustomActionFilter>();
             services.AddHostedService<HelloWorldHostedService>();
             services.AddAutoMapper(typeof(Startup));
-            services.AddIdentity<ApplicationUser, IdentityRole<long>>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+           
 
             services.AddTransient<HashService>();
             
@@ -240,6 +203,24 @@ namespace Ottobo.Api
                
                 return new RobotTaskService(logger, unitOfWork,  "");
             });
+            
+            services.AddScoped<RoleService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<RoleService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new RoleService(logger, unitOfWork,  "");
+            });
+            
+            services.AddScoped<UserService>(conf =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var logger = serviceProvider.GetService<ILogger<UserService>>();
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+               
+                return new UserService(logger, unitOfWork,  "Role");
+            });
 
 
             services.AddSwaggerGen(config =>
@@ -264,9 +245,6 @@ namespace Ottobo.Api
                 
                 config.SchemaFilter<SnakeCaseSchemaFilter>();
                 
-                
-                
-                
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -274,7 +252,10 @@ namespace Ottobo.Api
             });
             
             
-            
+            //MAKE data migrations
+
+            services.AddSingleton<StartUpMiddleware>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -301,6 +282,9 @@ namespace Ottobo.Api
             app.UseAuthorization();
             app.UseCors("AllowSpecificOrigins");
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            StartUpMiddleware startUpMiddleware = app.ApplicationServices.GetService<StartUpMiddleware>();
+            //startUpMiddleware.InitStartUp();
         }
     }
 }
