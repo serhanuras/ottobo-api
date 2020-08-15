@@ -24,6 +24,8 @@ namespace Ottobo.Entities
         public DateTime? UpdatedOn { get; set; }
 
         public DateTime LastAccessed { get; set; }
+        public DateTime BirthDate { get; set; }
+
         
        
         
